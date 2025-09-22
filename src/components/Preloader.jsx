@@ -2,7 +2,9 @@ import React from 'react'
 
 const Preloader = () => {
   return (
-    <div>Preloader</div>
+    <div style={{height:"100vh"}} >
+      <img style={{width:"900px"}} src="https://www.longwood.edu/media/top-tier/news/2014/buzz/realinquirycat.gif" alt="" />
+    </div>
   )
 }
 
