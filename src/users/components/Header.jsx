@@ -43,16 +43,16 @@ function Header() {
           </Link>
         </div>
         <ul className={listStatus ? "flex flex-col" : 'md:flex justify-center itens-center  hidden'}>
-          <li className='md: mx-2 mt-3 md:mt-0'>
+          <li className='md: mx-8 mt-3 md:mt-0'>
             <Link to={'/'}>HOME</Link>
           </li>
-          <li className='md: mx-2 mt-3 md:mt-0'>
+          <li className='md: mx-8 mt-3 md:mt-0'>
             <Link to={'/all-books'} >BOOKS</Link>
           </li>
-          <li className='md: mx-2 mt-3 md:mt-0'>
+          <li className='md: mx-8 mt-3 md:mt-0'>
             <Link to={'/careers'} >CAREERS</Link>
           </li>
-          <li className='md: mx-2 mt-3 md:mt-0'>
+          <li className='md: mx-8 mt-3 md:mt-0'>
             <Link to={'/contact'} >CONTACT</Link>
           </li>
         </ul>
