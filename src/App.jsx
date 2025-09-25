@@ -9,10 +9,11 @@ import ViewBook from './users/pages/ViewBook'
 import Profile from './users/pages/Profile'
 import Careers from './users/pages/Careers'
 import Contact from './users/pages/Contact'
-import AdminDashboard  from './admin/pages/AdminDashboard'
-import ResourceAdmin  from './admin/pages/ResourceAdmin'
-import CareerAdmin  from './admin/pages/CareerAdmin'
-import SettingAdmin  from './admin/pages/SettingAdmin'
+import AdminDashboard from './admin/pages/AdminDashboard'
+import ResourceAdmin from './admin/pages/ResourceAdmin'
+import CareerAdmin from './admin/pages/CareerAdmin'
+import SettingAdmin from './admin/pages/SettingAdmin'
+import Pnf from './pages/Pnf'
 
 
 function App() {
@@ -29,17 +30,18 @@ function App() {
     <>
       <Routes>
         <Route path='/' element={loading ? <Preloader /> : <Home />} />
-        <Route path='/login' element={<Auth/>} />
-        <Route path='/register' element={<Auth register/>} />
-        <Route path='/all-books' element={<AllBooks/>} />
-        <Route path='/books/id:/view' element={<ViewBook/>} />
-        <Route path='/profile' element={<Profile/>} />
-        <Route path='careers' element={<Careers/>} />
-        <Route path='contact' element={<Contact/>} />
-        <Route path='admin-dashboard' element={loading?<Preloader/>:<AdminDashboard/>} />
-        <Route path='admin-resources' element={<ResourceAdmin/>} />
-        <Route path='admin-careers' element={<CareerAdmin/>} />
-        <Route path='admin-settings' element={<SettingAdmin/>} />
+        <Route path='/login' element={<Auth />} />
+        <Route path='/register' element={<Auth register />} />
+        <Route path='/all-books' element={<AllBooks />} />
+        <Route path={'/books/:id/view'} element={<ViewBook />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='careers' element={<Careers />} />
+        <Route path='contact' element={<Contact />} />
+        <Route path='admin-dashboard' element={loading ? <Preloader /> : <AdminDashboard />} />
+        <Route path='admin-resources' element={<ResourceAdmin />} />
+        <Route path='admin-careers' element={<CareerAdmin />} />
+        <Route path='admin-settings' element={<SettingAdmin />} />
+        <Route path='/*' element={<Pnf />} />
       </Routes>
     </>
   )

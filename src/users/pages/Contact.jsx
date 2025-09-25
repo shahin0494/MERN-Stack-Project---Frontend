@@ -9,11 +9,13 @@ function Contact() {
   return (
     <>
       <Header />
-      <div className='flex flex-col items-center justify-center px-5 py-5'>
+      <div className='flex flex-col items-center justify-center px-10 py-10'>
         <h1 className='text-2xl'>Contacts</h1>
         <p className='mt-5 text-justify md:text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod repudiandae ullam, maxime quibusdam temporibus, placeat, minima sed non asperiores assumenda libero ipsa harum quisquam saepe rem earum sit! Qui, quia. Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro iste nobis eum ipsa facere quam placeat laborum, sunt iusto odit ipsum dolorem adipisci nisi, vitae, qui provident? Accusantium, et distinctio.</p>
+
         {/* contact details */}
         <div className="mt-5 grid grid-cols-1 md:grid-cols-3 border border-gray-200 rounded px-10 py-5 gap-6 text-center md:text-left">
+
           {/* Address */}
           <div className="flex items-center space-x-3">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-200">
@@ -39,14 +41,14 @@ function Contact() {
           </div>
         </div>
         {/* map and feedback */}
-        <div className='mt-5 grid grid-cols-1 md:grid-cols-2 gap-20 text-center  '>
+        <div className='mt-5 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-20 text-center  '>
           {/* feedback */}
           <div className='flex items-center space-x-6'>
-            <div className='w-100 border border-slate-200 py-5 px-5 rounded bg-gray-300 h-105'>
+            <div className='w-100 border border-slate-200 py-5 px-5 rounded bg-gray-200 h-105'>
               <h1>Send Me a Message</h1>
               <input type="text" placeholder='Name' className=' mt-5 w-full bg-white px-2 py-2 rounded' />
               <input type="text" placeholder='Email id' className=' mt-5 w-full bg-white px-2 py-2 rounded' />
-              <input type="text" placeholder='Message' className=' mt-5 w-full  bg-white px-2 py-15 rounded' />
+              <textarea type="text" placeholder='Message' className=' mt-5 w-full  bg-white px-2 py-2 rounded' rows={"5"} />
               <button className='mt-5 bg-cyan-800 text-white w-full py-2 rounded ' >Send <FontAwesomeIcon icon={faPaperPlane} /></button>
             </div>
           </div>
