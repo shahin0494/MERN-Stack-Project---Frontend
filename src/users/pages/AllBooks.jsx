@@ -3,6 +3,8 @@ import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
+
 
 function AllBooks() {
 
@@ -71,6 +73,7 @@ function AllBooks() {
               <p className='text-blue-400 text-lg'>Author</p>
               <p>Book Title</p>
               <p>$ 50</p>
+              <Link to={'/books/:id/view'} className='px-5 py-3 bg-blue-600 text-white rounded my-3' >View More</Link>
             </div>
           </div>
           <div className='shadow p-3 rounded mx-2'>
@@ -79,6 +82,7 @@ function AllBooks() {
               <p className='text-blue-400 text-lg'>Author</p>
               <p>Book Title</p>
               <p>$ 50</p>
+              <Link to={'/books/:id/view'} className='px-5 py-3 bg-blue-600 text-white rounded my-3' >View More</Link>
             </div>
           </div>
           <div className='shadow p-3 rounded mx-2'>
@@ -87,6 +91,7 @@ function AllBooks() {
               <p className='text-blue-400 text-lg'>Author</p>
               <p>Book Title</p>
               <p>$ 50</p>
+              <Link to={'/books/:id/view'} className='px-5 py-3 bg-blue-600 text-white rounded my-3' >View More</Link>
             </div>
           </div>
         </div>
