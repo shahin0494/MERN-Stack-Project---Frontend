@@ -15,7 +15,7 @@ function Header() {
         {/* logo */}
         <div className='flex items-center'>
           <img width={"50px"} src="./logo.png" alt="" />
-          <h1 className='text-2xl font-bold ms-2 md:hidden'>Book Store</h1>
+          <h1 className='text-2xl font-bold ms-2 md:hidden'>BOOK STORE</h1>
         </div>
         {/* title */}
         <div className='md:flex justify-center items-center hidden'>

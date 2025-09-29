@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRightFromBracket, faLocationDot } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faSquareUpRight, faLocationDot, faXmark } from '@fortawesome/free-solid-svg-icons'
 
 function Careers() {
+  const [modalStatus, setModalStatus] = useState(false)
   return (
     <>
       <Header />
@@ -24,7 +26,7 @@ function Careers() {
         <div className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
           <div className='  flex justify-between'>
             <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>Job Title</h1>
-            <button className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1'>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
+            <button onClick={()=>setModalStatus(true)} className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
           </div>
           <hr className='  md:w-330 mt-5 text-slate-400' />
           <div className='mt-5 text-gray-600'>
@@ -38,7 +40,7 @@ function Careers() {
         <div className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
           <div className='  flex justify-between'>
             <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>Job Title</h1>
-            <button className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1'>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
+            <button onClick={()=>setModalStatus(true)} className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
           </div>
           <hr className='  md:w-330 mt-5 text-slate-400' />
           <div className='mt-5 text-gray-600'>
@@ -52,7 +54,7 @@ function Careers() {
         <div className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
           <div className='  flex justify-between'>
             <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>Job Title</h1>
-            <button className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1'>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
+            <button onClick={()=>setModalStatus(true)} className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
           </div>
           <hr className='  md:w-330 mt-5 text-slate-400' />
           <div className='mt-5 text-gray-600'>
@@ -64,6 +66,73 @@ function Careers() {
           </div>
         </div>
       </div>
+
+      {/* modal  */}
+      {modalStatus &&
+        <div className="relative z-10  "  >
+          <div className='bg-gray-500/75 p-3 fixed inset-0 transition-opacity' >
+            <div className="flex h-full justify-center items-center md:min-h-screen">
+              <div className='bg-white rounded' style={{ width: '900px' }}>
+                <div className='bg-black rounded text-white p-3 flex justify-between w-full'>
+                  <h3 className='font-bold'>Applicatin Form</h3>
+                  <FontAwesomeIcon className='bg-white text-black p-1 rounded' icon={faXmark} onClick={() => setModalStatus(false)} />
+                </div>
+                <div className='ml-5 my-5'>
+                  <form action="">
+                    <div className='flex'>
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        className="px-3 py-2 my-2 w-full border mx-2 border-gray-400 bg-white rounded"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Qualification"
+                        className="px-3 py-2 my-2 w-full border  border-gray-400 mx-2 bg-white rounded"
+                      />
+                    </div>
+                    <div className='flex'>
+                      <input
+                        type="email "
+                        placeholder="Email"
+                        className="px-3 py-2 my-2 w-full border mx-2 border-gray-400 bg-white rounded"
+                      />
+                      <input
+                        type="number"
+                        placeholder="Phone Number"
+                        className="px-3 py-2 my-2 w-full border  border-gray-400 mx-2 bg-white rounded"
+                      />
+                    </div>
+                    <div className='mx-2 my-3'>
+                      <textarea
+                        placeholder="Cover Letter"
+                        className="my-2 w-full h-25 px-3 py-2  border  border-gray-400  bg-white rounded"
+                      ></textarea>
+                    </div>
+
+                    <div className='mx-3'>
+                      <input
+                        type="file"
+                        placeholder="Phone Number"
+                        className="px-3 py-2 my-2 w-full border  border-gray-400 mx-2 bg-white rounded"
+                      />
+                    </div>
+                  </form>
+
+                  {/* modal footer */}
+                  <div className='bg-neutral-200 p-2 w-215 mt-4 flex justify-end'>
+                    <button className='py-2 px-3 rounded bg-neutral-800 text-white'>Reset</button>
+                    <button className='py-2 px-3 rounded mx-2 bg-sky-600 text-white'>Submit</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>}
+
+        
+
       <Footer />
     </>
   )
