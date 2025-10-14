@@ -17,7 +17,6 @@ function Home() {
           <input className='w-100 border-none outline-0  h-10 text-black me-2' type="text" placeholder='Search Books' />
           <button>  <FontAwesomeIcon className='text-black' icon={faMagnifyingGlass} /></button>
         </div>
-`
       </div>
       {/* arrival */}
       <section className='md:px-40 p-5 flex flex-col justify-center items-center'>
