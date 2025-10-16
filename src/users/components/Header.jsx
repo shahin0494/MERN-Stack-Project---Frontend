@@ -19,13 +19,18 @@ function Header() {
     if (sessionStorage.getItem("token")) {
       const token = sessionStorage.getItem("token")
       setToken(token)
+
       const user = JSON.parse(sessionStorage.getItem("user"))
+
       setUserDp(user.profile)
     }
-  }, [])
+  },[token])
 
   const logout = () => {
     sessionStorage.clear()
+    setToken("")
+    setUserDp("")
+    setDropDownStatus(false)
     navigate("/")
   }
   //console.log(token)
@@ -57,7 +62,7 @@ function Header() {
             :
             <div className='relative inline-block text-left'>
               <button type='button' onClick={() => setDropDownStatus(!dropDownStatus)} className=' w-full bg-white px-3 py-2 shadow-xs hover:bg-gray-50'>
-                <img width={"40px"} height={"40px"} style={{ borderRadius: "50%" }} src={userDp == "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQytc93VfA29gwZ4w1ySdWjx1CSJBM6qGG3BA&s" : ""} alt="userdp" />
+                <img width={"40px"} height={"40px"} style={{ borderRadius: "50%" }} src={userDp == "" ? "https://encrypted-tbn0.gstatic.com/images? q=tbn:ANd9GcQytc93VfA29gwZ4w1ySdWjx1CSJBM6qGG3BA&s" : userDp.startsWith("https://lh3.googleusercontent.com/") ? userDp : "https://encrypted-tbn0.gstatic.com/images? q=tbn:ANd9GcQytc93VfA29gwZ4w1ySdWjx1CSJBM6qGG3BA&s"} alt="userdp" />
               </button>
               {
                 dropDownStatus &&

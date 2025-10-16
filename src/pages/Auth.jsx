@@ -5,7 +5,6 @@ import React, { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { googleLoginAPI, loginAPI, registerAPI } from '../services/allAPI'
 import { GoogleLogin } from '@react-oauth/google';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 
 
@@ -91,16 +90,31 @@ function Auth({ register }) {
     const credential = credentialResponse.credential
     const details = jwtDecode(credential)
     console.log(details);
-    const result = await googleLoginAPI({
+    try{
+      const result = await googleLoginAPI({
       username: details.name,
       email: details.email,
       password: "googlepswd",
       profile: details.picture
     })
     console.log(result);
-    if (result.status==200) {
+    if (result.status == 200) {
       toast.success("Login Successfull")
-      sessionStorage.setItem("user",JSON.stringify)
+      sessionStorage.setItem("user", JSON.stringify(result.data.user))
+      sessionStorage.setItem("token", result.data.token)
+      setTimeout(() => {
+        if (result.data.user.role == "admin") {
+          navigate("/admin-dashboard")
+        } else {
+          navigate("/")
+        }
+      }, 2500);
+    } else {
+      toast.error("something went wrong")
+    }
+    }catch(err){
+      console.log(err);
+      
     }
   }
 
@@ -174,7 +188,7 @@ function Auth({ register }) {
         </div>
         <ToastContainer
           position="top-right"
-          autoClose={1500}
+          autoClose={500}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick={false}
