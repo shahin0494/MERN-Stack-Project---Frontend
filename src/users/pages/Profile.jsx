@@ -2,13 +2,34 @@ import React, { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck } from '@fortawesome/free-regular-svg-icons'
+import { faCircleCheck, faSquarePlus } from '@fortawesome/free-regular-svg-icons'
 
 function Profile() {
 
   const [sellBookStatus, setSellBookStatus] = useState("true")
   const [bookStatus, setBookStatus] = useState("false")
   const [purchaseStatus, setPurchaseStatus] = useState("false")
+  const [bookDetails, setBookDetails] = useState({
+    title: "", author: "", noOfPages: "", imageUrl: "", price: "", discountPrice: "", abstract: "", publisher: "", language: "", isbn: "", category: "", uploadImg: []
+  })
+  //console.log(bookDetails);
+  const [preview, setPreview] = useState("")
+  const [previewList, setPreviewList] = useState([])
+
+  const handleUploadBookImage = (e) => {
+    //console.log(e.target.files[0]);
+
+
+    const fileArray = bookDetails.uploadImg
+    fileArray.push(e.target.files[0])
+    setBookDetails({ ...bookDetails, uploadImg: fileArray })
+    const url = URL.createObjectURL(e.target.files[0])
+    setPreview(url)
+    //console.log(url);
+    const bookImageArray = previewList
+    bookImageArray.push(url)
+    setPreviewList(bookImageArray)
+  }
 
   return (
     <>
@@ -49,48 +70,71 @@ function Profile() {
           <div className='md:grid grid-cols-2 mt-10 w-full'>
             <div className='px-3'>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Title' />
+                <input value={bookDetails.title} onChange={e => setBookDetails({ ...bookDetails, title: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Title' />
               </div>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Author' />
+                <input value={bookDetails.author} onChange={e => setBookDetails({ ...bookDetails, author: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Author' />
               </div>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='No. of Pages' />
+                <input value={bookDetails.noOfPages} onChange={e => setBookDetails({ ...bookDetails, noOfPages: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='No. of Pages' />
               </div>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Image URL' />
+                <input value={bookDetails.imageUrl} onChange={e => setBookDetails({ ...bookDetails, imageUrl: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Image URL' />
               </div>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Price' />
+                <input value={bookDetails.price} onChange={e => setBookDetails({ ...bookDetails, price: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Price' />
               </div>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Discount Price' />
+                <input value={bookDetails.discountPrice} onChange={e => setBookDetails({ ...bookDetails, discountPrice: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Discount Price' />
               </div>
               <div className='mb-3 px-3'>
-                <textarea type="text" className="p-2 h-52 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Abstract' />
+                <textarea value={bookDetails.abstract} onChange={e => setBookDetails({ ...bookDetails, abstract: e.target.value })} type="text" className="p-2 h-52 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Abstract' />
               </div>
             </div>
             <div className='px-3'>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Publisher' />
+                <input value={bookDetails.publisher} onChange={e => setBookDetails({ ...bookDetails, publisher: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Publisher' />
               </div>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Language' />
+                <input value={bookDetails.language} onChange={e => setBookDetails({ ...bookDetails, language: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Language' />
               </div>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='ISBN' />
+                <input value={bookDetails.isbn} onChange={e => setBookDetails({ ...bookDetails, isbn: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='ISBN' />
               </div>
               <div className='mb-3 px-3'>
-                <input type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Category' />
+                <input value={bookDetails.category} onChange={e => setBookDetails({ ...bookDetails, category: e.target.value })} type="text" className="p-2 rounded border border-gray-200 w-full text-black placeholder-gray-400 bg-white" placeholder='Category' />
               </div>
+
               <div className='mb-3 px-3 flex justify-center items-center'>
                 <label htmlFor="upload">
-                  <img className='md:w-100 md:h-100 md:ms-50' src="https://www.pngplay.com/wp-content/uploads/8/Upload-Icon-Logo-Transparent-Free-PNG.png" alt="" />
+                  <input
+                    onChange={e => handleUploadBookImage(e)}
+                    type="file"
+                    id='upload'
+                    className='hidden' />
+                  {!preview ? <img className='md:w-100 md:h-100 md:ms-0' src="https://www.pngplay.com/wp-content/uploads/8/Upload-Icon-Logo-Transparent-Free-PNG.png" alt="" />
+                    :
+                    <img className='md:w-100 md:h-100 md:ms-50' src={preview} alt="" />
+                  }
                 </label>
-                <input type="file"
-                  id='upload'
-                  className='hidden' />
               </div>
+
+              {preview && <div className='flex justify-center items-center '>
+                {
+                  previewList?.map(imageUrl=>(
+                    <img src={imageUrl} alt="" width={"70px"} height={'70px'} className='mx-3' />
+                  ))
+                }
+
+               {
+               previewList.length<3 && 
+               <label htmlFor="upload">
+                  <input
+                    onChange={e => handleUploadBookImage(e)} type="file" id='upload' className='hidden' />
+                  <FontAwesomeIcon className='fa-3x shadow ms-3 text-gray-500' icon={faSquarePlus} />
+                </label>}
+
+              </div>}
 
             </div>
           </div>
