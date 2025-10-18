@@ -1,20 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faSquarePlus } from '@fortawesome/free-regular-svg-icons'
+import { ToastContainer, toast } from 'react-toastify'
+import { addBookAPI } from '../../services/allAPI'
+
 
 function Profile() {
 
-  const [sellBookStatus, setSellBookStatus] = useState("true")
-  const [bookStatus, setBookStatus] = useState("false")
-  const [purchaseStatus, setPurchaseStatus] = useState("false")
+  const [sellBookStatus, setSellBookStatus] = useState(true)
+  const [bookStatus, setBookStatus] = useState(false)
+  const [purchaseStatus, setPurchaseStatus] = useState(false)
   const [bookDetails, setBookDetails] = useState({
     title: "", author: "", noOfPages: "", imageUrl: "", price: "", discountPrice: "", abstract: "", publisher: "", language: "", isbn: "", category: "", uploadImg: []
   })
   //console.log(bookDetails);
   const [preview, setPreview] = useState("")
   const [previewList, setPreviewList] = useState([])
+  const [token, setToken] = useState("")
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      setToken(sessionStorage.getItem("token"))
+    }
+  }, [])
 
   const handleUploadBookImage = (e) => {
     //console.log(e.target.files[0]);
@@ -29,6 +39,58 @@ function Profile() {
     const bookImageArray = previewList
     bookImageArray.push(url)
     setPreviewList(bookImageArray)
+  }
+
+  const handleReset = () => {
+    setBookDetails({
+      title: "", author: "", noOfPages: "", imageUrl: "", price: "", discountPrice: "", abstract: "", publisher: "", language: "", isbn: "", category: "", uploadImg: []
+    })
+    setPreview("")
+    setPreviewList([])
+  }
+
+  const handleBookSubmit = async () => {
+    const { title, author, noOfPages, imageUrl, price, discountPrice, abstract, publisher, language, isbn, category, uploadImg } = bookDetails
+    if (!title || !author || !noOfPages || !imageUrl || !price || !discountPrice || !abstract || !publisher || !language || !isbn || !category || uploadImg.length == 0) {
+      toast.info("Please fill the form")
+    } else {
+      // api call
+      const reqHeader = {
+        "Authorization": `Bearer ${token}`
+      }
+      const reqBody = new FormData()
+      // append reqBody.append(key,value)
+      for (let key in bookDetails) {
+        if (key != "uploadImg") {
+          reqBody.append(key, bookDetails[key])
+        } else {
+          bookDetails.uploadImg.forEach(img => {
+            reqBody.append("uploadImg", img)
+          })
+        }
+      }
+      try {
+        const result = await addBookAPI(reqBody, reqHeader)
+        console.log(result);
+        if (result.status == 401) {
+          toast.warning(result.response.data)
+          // clear all field
+          handleReset()
+        } else if (result.status == 200) {
+          toast.success("Book added successfully")
+          // clear all field
+          handleReset()
+        } else {
+          toast.error("Something went wrong")
+          // clear all field
+          handleReset()
+
+        }
+      } catch (err) {
+        console.log(err);
+
+      }
+    }
   }
 
   return (
@@ -112,7 +174,7 @@ function Profile() {
                     type="file"
                     id='upload'
                     className='hidden' />
-                  {!preview ? <img className='md:w-100 md:h-100 md:ms-0' src="https://www.pngplay.com/wp-content/uploads/8/Upload-Icon-Logo-Transparent-Free-PNG.png" alt="" />
+                  {!preview ? <img className='md:w-50 md:h-50 md:ms-0' src="https://www.pngplay.com/wp-content/uploads/8/Upload-Icon-Logo-Transparent-Free-PNG.png" alt="" />
                     :
                     <img className='md:w-100 md:h-100 md:ms-50' src={preview} alt="" />
                   }
@@ -121,18 +183,18 @@ function Profile() {
 
               {preview && <div className='flex justify-center items-center '>
                 {
-                  previewList?.map(imageUrl=>(
+                  previewList?.map(imageUrl => (
                     <img src={imageUrl} alt="" width={"70px"} height={'70px'} className='mx-3' />
                   ))
                 }
 
-               {
-               previewList.length<3 && 
-               <label htmlFor="upload">
-                  <input
-                    onChange={e => handleUploadBookImage(e)} type="file" id='upload' className='hidden' />
-                  <FontAwesomeIcon className='fa-3x shadow ms-3 text-gray-500' icon={faSquarePlus} />
-                </label>}
+                {
+                  previewList.length < 3 &&
+                  <label htmlFor="upload">
+                    <input
+                      onChange={e => handleUploadBookImage(e)} type="file" id='upload' className='hidden' />
+                    <FontAwesomeIcon className='fa-3x shadow ms-3 text-gray-500' icon={faSquarePlus} />
+                  </label>}
 
               </div>}
 
@@ -140,8 +202,8 @@ function Profile() {
           </div>
           {/* modal footer */}
           <div className='bg-neutral-200 p-2 w-215 mt-4 flex justify-end'>
-            <button className='py-2 px-3 rounded bg-neutral-800 text-white'>Reset</button>
-            <button className='py-2 px-3 rounded mx-2 bg-sky-600 text-white'>Submit</button>
+            <button onClick={handleReset} className='py-2 px-3 rounded bg-neutral-800 text-white'>Reset</button>
+            <button onClick={handleBookSubmit} className='py-2 px-3 rounded mx-2 bg-sky-600 text-white'>Submit</button>
           </div>
         </div>
       }
@@ -203,6 +265,19 @@ function Profile() {
       }
 
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      // transition={Slide}
+      />
     </>
 
   )

@@ -1,11 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
+import { getHomeBooksApi } from '../../services/allAPI'
+
+
 
 function Home() {
+
+  
+  const [homeBooks, setHomeBooks] = useState([])
+
+  useEffect(() => {
+    getHomeBooks()
+  }, [])
+
+  console.log(homeBooks);
+
+  const getHomeBooks = async () => {
+    try {
+      const result = await getHomeBooksApi()
+      if (result.status == 200) {
+        setHomeBooks(result.data)
+      }
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
+
   return (
     <>
       <Header />
@@ -24,15 +50,23 @@ function Home() {
         <h1 className='text-3xl'>Explore Our Latest Collections</h1>
         <div className="md:grid grid-cols-4 w-full mt-5">
           <div className="p-3">
-            <div className="shadow p-3 rounded">
-              <img width={'100%'} height={'300px'} src="https://wallpaperaccess.com/full/1209397.jpg" alt="book" />
-              <div className="flex justify-center flex-col items-center ">
-                <p className="text-blue-700 font-bold text-lg">Author</p>
-                <p >Book Title</p>
-                <p>$ 400</p>
+            {
+              homeBooks.length > 0 ?
+                homeBooks?.map((book, index) => (
+                  <div key={index} className="shadow p-3 rounded">
+                    <img width={'100%'} height={'300px'} src={book?.imageUrl} alt="book" />
+                    <div className="flex justify-center flex-col items-center ">
+                      <p className="text-blue-700 font-bold text-lg">{book?.author}</p>
+                      <p >{book?.title}</p>
+                      <p>$ {book?.discountPrice}</p>
 
-              </div>
-            </div>
+                    </div>
+                  </div>
+                ))
+
+                :
+                <p>Loading</p>
+            }
           </div>
         </div>
         <div className="text-center my-5">
@@ -55,7 +89,7 @@ function Home() {
       </section>
       {/* testimony */}
       <section className="md:px-40 p-5 flex flex-col justify-center items-center">
-        <h1 className="text-xl font-bold">TESTIMONIALS</h1> 
+        <h1 className="text-xl font-bold">TESTIMONIALS</h1>
         <h1 className="text-3xl">See What others are saying</h1>
         <div className="flex my-5 flex-col justify-center items-center">
           <img width={'300px'} height={'300px'} style={{ borderRadius: "5%" }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgjHEh5IgC_05IrKTRGgBjPNNtfIkrMMajSQ&s" alt="" />
