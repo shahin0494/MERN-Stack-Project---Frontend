@@ -17,21 +17,25 @@ export const googleLoginAPI = async (reqBody) => {
 }
 
 // home page book api - called by home in useeffect
-export const getHomeBooksApi = async ()=>{
-    return await commonAPI("GET",`${SERVERURL}/home-books`)
+export const getHomeBooksApi = async () => {
+    return await commonAPI("GET", `${SERVERURL}/home-books`)
 }
 
 // all career api 
 
 // -----------authorised user api - user -------------------------------
+// upload/add book - called by profile component
 
-// view all book
+export const addBookAPI = async (reqBody, reqHeader) => {
+    return await commonAPI("POST", `${SERVERURL}/add-book`, reqBody, reqHeader)
+}
 
 // view single book
 
-// upload/add book - called by profile component
-export const addBookAPI = async (reqBody, reqHeader) => {
-    return await commonAPI("POST", `${SERVERURL}/add-book`, reqBody, reqHeader)
+// view all book - called by allbooks when page is loaded
+
+export const getAllBooksAPI = async (reqHeader) => {
+    return await commonAPI("GET",`${SERVERURL}/all-books`,{},reqHeader)
 }
 
 // profile update

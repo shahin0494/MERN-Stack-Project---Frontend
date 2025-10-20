@@ -1,103 +1,150 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
-
+import { ToastContainer, toast } from 'react-toastify'
+import { getAllBooksAPI } from '../../services/allAPI'
 
 function AllBooks() {
 
   const [listStatus, setListStatus] = useState(false)
+  const [token, setToken] = useState("")
+  const [books, setBooks] = useState([])
+
+  console.log(books);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      const userToken = sessionStorage.getItem("token")
+      setToken(userToken)
+      getALLBooks(userToken)
+    }
+  }, [])
+
+  const getALLBooks = async (userToken) => {
+    console.log(userToken);
+
+    const reqHeader = {
+      "Authorization": `Bearer ${userToken}`
+    }
+    try {
+      const result = await getAllBooksAPI(reqHeader)
+      if (result.status == 200) {
+        setBooks(result.data)
+      } else {
+        console.log(result);
+        toast.warning(result.response.data)
+      }
+    } catch (err) {
+      console.log(err);
+
+    }
+  }
 
   return (
     <>
       <Header />
+      {
+        token ?
+          <>
+            <div className="flex justify-center flex-col my-5 items-center">
+              <h1 className="text-3xl">Collections </h1>
+              <div className="flex my-5">
+                <input type="text" className="p-2 rounded border border-gray-400 md:w-100 text-black placeholder-gray-700" placeholder='Search by Title' />
+                <button className='bg-blue-400 ms-2 rounded w-15 md:w-20'>Search</button>
+              </div>
 
-      <>
-        <div className="flex justify-center flex-col my-5 items-center">
-          <h1 className="text-3xl">Collections </h1>
-          <div className="flex my-5">
-            <input type="text" className="p-2 rounded border border-gray-400 md:w-100 text-black placeholder-gray-700" placeholder='Search by Title' />
-            <button className='bg-blue-400 ms-2 rounded w-15 md:w-20'>Search</button>
-          </div>
+            </div>
+            {/* grid */}
+            <div className="md:grid grid-cols-4 md:px-20 p-5">
+              {/* filter */}
+              <div className="col-span-1">
+                <div className='flex justify-between'>
+                  <h1 className='text-2xl font-semibold'>Filters</h1>
+                  <button onClick={() => setListStatus(!listStatus)} className='text-2xl md:hidden'><FontAwesomeIcon icon={faBars} /></button>
+                </div>
+                <div className={listStatus ? "block" : "md:block hidden"}>
+                  <div className='mt-3'>
+                    <input type="radio" id='literary' name='filter' />
+                    <label className='ms-3' htmlFor="literary">Literacy Fiction</label>
+                  </div>
+                  <div className='mt-3'>
+                    <input type="radio" id='literary' name='filter' />
+                    <label className='ms-3' htmlFor="literary">Philosophy</label>
+                  </div>
+                  <div className='mt-3'>
+                    <input type="radio" id='literary' name='filter' />
+                    <label className='ms-3' htmlFor="literary">Romance </label>
+                  </div>
+                  <div className='mt-3'>
+                    <input type="radio" id='literary' name='filter' />
+                    <label className='ms-3' htmlFor="literary">Mystery/Thriller</label>
+                  </div>
+                  <div className='mt-3'>
+                    <input type="radio" id='literary' name='filter' />
+                    <label className='ms-3' htmlFor="literary">Horror</label>
+                  </div>
+                  <div className='mt-3'>
+                    <input type="radio" id='literary' name='filter' />
+                    <label className='ms-3' htmlFor="literary">Auto Biography</label>
+                  </div>
+                  <div className='mt-3'>
+                    <input type="radio" id='literary' name='filter' />
+                    <label className='ms-3' htmlFor="literary">Self Help</label>
+                  </div>
+                  <div className='mt-3'>
+                    <input type="radio" id='literary' name='filter' />
+                    <label className='ms-3' htmlFor="literary">Politics</label>
+                  </div>
+                </div>
+              </div>
+              {/* books */}
 
-        </div>
-        {/* grid */}
-        <div className="md:grid grid-cols-4 md:px-20 p-5">
-          {/* filter */}
-          <div className="col-span-1">
-            <div className='flex justify-between'>
-              <h1 className='text-2xl font-semibold'>Filters</h1>
-              <button onClick={() => setListStatus(!listStatus)} className='text-2xl md:hidden'><FontAwesomeIcon icon={faBars} /></button>
-            </div>
-            <div className={listStatus ? "block" : "md:block hidden"}>
-              <div className='mt-3'>
-                <input type="radio" id='literary' name='filter' />
-                <label className='ms-3' htmlFor="literary">Literacy Fiction</label>
-              </div>
-              <div className='mt-3'>
-                <input type="radio" id='literary' name='filter' />
-                <label className='ms-3' htmlFor="literary">Philosophy</label>
-              </div>
-              <div className='mt-3'>
-                <input type="radio" id='literary' name='filter' />
-                <label className='ms-3' htmlFor="literary">Romance </label>
-              </div>
-              <div className='mt-3'>
-                <input type="radio" id='literary' name='filter' />
-                <label className='ms-3' htmlFor="literary">Mystery/Thriller</label>
-              </div>
-              <div className='mt-3'>
-                <input type="radio" id='literary' name='filter' />
-                <label className='ms-3' htmlFor="literary">Horror</label>
-              </div>
-              <div className='mt-3'>
-                <input type="radio" id='literary' name='filter' />
-                <label className='ms-3' htmlFor="literary">Auto Biography</label>
-              </div>
-              <div className='mt-3'>
-                <input type="radio" id='literary' name='filter' />
-                <label className='ms-3' htmlFor="literary">Self Help</label>
-              </div>
-              <div className='mt-3'>
-                <input type="radio" id='literary' name='filter' />
-                <label className='ms-3' htmlFor="literary">Politics</label>
-              </div>
-            </div>
-          </div>
-          {/* books */}
-          <div className='shadow p-3 rounded mx-2'>
-            <img width={'100%'} style={{ height: '300px' }} src="https://helloartsy.com/wp-content/uploads/kids/school/how-to-draw-a-book/how-to-draw-a-book-step-6.jpg" alt="" />
-            <div className='flex justify-center flex-col items-center'>
-              <p className='text-blue-400 text-lg'>Author</p>
-              <p>Book Title</p>
-              <p>$ 50</p>
-              <Link to={'/books/:id/view'} className='px-5 py-3 bg-blue-600 text-white rounded my-3' >View More</Link>
-            </div>
-          </div>
-          <div className='shadow p-3 rounded mx-2'>
-            <img width={'100%'} style={{ height: '300px' }} src="https://helloartsy.com/wp-content/uploads/kids/school/how-to-draw-a-book/how-to-draw-a-book-step-6.jpg" alt="" />
-            <div className='flex justify-center flex-col items-center'>
-              <p className='text-blue-400 text-lg'>Author</p>
-              <p>Book Title</p>
-              <p>$ 50</p>
-              <Link to={'/books/:id/view'} className='px-5 py-3 bg-blue-600 text-white rounded my-3' >View More</Link>
-            </div>
-          </div>
-          <div className='shadow p-3 rounded mx-2'>
-            <img width={'100%'} style={{ height: '300px' }} src="https://helloartsy.com/wp-content/uploads/kids/school/how-to-draw-a-book/how-to-draw-a-book-step-6.jpg" alt="" />
-            <div className='flex justify-center flex-col items-center'>
-              <p className='text-blue-400 text-lg'>Author</p>
-              <p>Book Title</p>
-              <p>$ 50</p>
-              <Link to={'/books/:id/view'} className='px-5 py-3 bg-blue-600 text-white rounded my-3' >View More</Link>
-            </div>
-          </div>
-        </div>
-      </>
+              <div className='col-span-3'>
+                <div className='md:grid grid-cols-4 mt-5 md:mt-0'>
+                  {
+                    books.length > 0 ?
+                      books.map(book => (
+                        <div key={book?._id} className='shadow p-3 rounded mx-2'>
+                          <img width={'100%'} style={{ height: '350px' }} src={book?.imageUrl} alt="" />
+                          <div className='flex justify-center flex-col items-center'>
+                            <p className='text-blue-400 text-lg'>{book?.author.slice(0,20)}</p>
+                            <p>{book?.title.slice(0,20)}</p>
+                            <Link to={`/books/${book?._id}/view`} className='px-5 py-3 bg-blue-600 text-white rounded my-3' >View Book</Link>
+                          </div>
+                        </div>
+                      ))
+                      :
+                      <p>no books</p>
 
+                  }
+                </div>
+              </div>
+
+            </div>
+          </>
+          :
+          <div className='my-10 flex justify-center items-center flex-col min-h-100vh'>
+            <img className='w-73' src="https://cdn.dribbble.com/userupload/20385903/file/original-f73ab63cabefa9633131d8179db7a3a9.gif" alt="lock" />
+            <p className='font-semibold text-lg'>Please <Link to={"/login"} className='text-cyan-600 font-semibold underline'>Login</Link> to Explore More ....</p>
+          </div>
+      }
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      // transition={Slide}
+      />
     </>
   )
 }

@@ -48,12 +48,12 @@ function Home() {
       <section className='md:px-40 p-5 flex flex-col justify-center items-center'>
         <h1 className='text-2xl font-bold' >NEW ARIVALS</h1>
         <h1 className='text-3xl'>Explore Our Latest Collections</h1>
-        <div className="md:grid grid-cols-4 w-full mt-5">
-          <div className="p-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full mt-5">
+          
             {
               homeBooks.length > 0 ?
                 homeBooks?.map((book, index) => (
-                  <div key={index} className="shadow p-3 rounded">
+                  <div key={index} className="shadow p-3 flex  flex-col rounded">
                     <img width={'100%'} height={'300px'} src={book?.imageUrl} alt="book" />
                     <div className="flex justify-center flex-col items-center ">
                       <p className="text-blue-700 font-bold text-lg">{book?.author}</p>
@@ -67,10 +67,10 @@ function Home() {
                 :
                 <p>Loading</p>
             }
-          </div>
+          
         </div>
         <div className="text-center my-5">
-          <Link to={'/all-books'} className='bg-blue-600 p-3' >Explore More...</Link>
+          <Link to={'/all-books'} className='bg-blue-600 border hover:bg-white hover:text-blue-600 text-white p-3' >Explore More...</Link>
         </div>
       </section>
       {/* author */}
