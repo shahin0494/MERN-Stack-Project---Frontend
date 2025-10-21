@@ -85,12 +85,24 @@ function Header() {
           <button onClick={() => setListStatus(!listStatus)} ><FontAwesomeIcon className='text-2xl' icon={faBars} /></button>
 
           {/* login link */}
-          <Link to={'/login'}>
-            <button className='border border-black rounded px-3 py-2 ms-3 hover:bg-black hover:text-white'>
-              <FontAwesomeIcon icon={faUser} className='me-2' />
-              Login
-            </button>
-          </Link>
+          {!token ? <Link to={'/login'}>
+            <button className='border border-black rounded px-3 py-2 ms-3 hover:bg-black hover:text-white'> <FontAwesomeIcon icon={faUser} className='me-2' />Login</button></Link>
+            :
+            <div className='relative inline-block text-left'>
+              <button type='button' onClick={() => setDropDownStatus(!dropDownStatus)} className=' w-full bg-white px-3 py-2 shadow-xs hover:bg-gray-50'>
+                <img width={"40px"} height={"40px"} style={{ borderRadius: "50%" }} src={userDp == "" ? "https://encrypted-tbn0.gstatic.com/images? q=tbn:ANd9GcQytc93VfA29gwZ4w1ySdWjx1CSJBM6qGG3BA&s" : userDp.startsWith("https://lh3.googleusercontent.com/") ? userDp : "https://encrypted-tbn0.gstatic.com/images? q=tbn:ANd9GcQytc93VfA29gwZ4w1ySdWjx1CSJBM6qGG3BA&s"} alt="userdp" />
+              </button>
+              {
+                dropDownStatus &&
+                <div className='absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black/5 focus:outline-hidden'>
+                  <div className='py-1'>
+                    <Link className='block px-4 my-2 text-sm text-gray-700' to={"/profile"}><p><FontAwesomeIcon icon={faAddressCard} className='me-2' />Profile</p></Link>
+                    <button onClick={logout} className='block px-4 my-2 text-sm text-gray-700'><FontAwesomeIcon icon={faPowerOff} className='me-2' />Logout</button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
 
         </div>
         <ul className={listStatus ? "flex flex-col" : 'md:flex justify-center itens-center  hidden'}>

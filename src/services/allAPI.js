@@ -24,18 +24,20 @@ export const getHomeBooksApi = async () => {
 // all career api 
 
 // -----------authorised user api - user -------------------------------
-// upload/add book - called by profile component
 
+// upload/add book - called by profile component
 export const addBookAPI = async (reqBody, reqHeader) => {
     return await commonAPI("POST", `${SERVERURL}/add-book`, reqBody, reqHeader)
 }
 
-// view single book
-
 // view all book - called by allbooks when page is loaded
-
 export const getAllBooksAPI = async (reqHeader) => {
-    return await commonAPI("GET",`${SERVERURL}/all-books`,{},reqHeader)
+    return await commonAPI("GET", `${SERVERURL}/all-books`, {}, reqHeader)
+}
+
+// view single book - called by view component
+export const getSingleBookAPI = async (bookId, reqHeader) => {
+    return await commonAPI("GET", `${SERVERURL}/books/${bookId}/view`, {}, reqHeader)
 }
 
 // profile update
