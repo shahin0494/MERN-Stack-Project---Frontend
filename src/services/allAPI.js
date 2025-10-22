@@ -31,8 +31,8 @@ export const addBookAPI = async (reqBody, reqHeader) => {
 }
 
 // view all book - called by allbooks when page is loaded
-export const getAllBooksAPI = async (reqHeader) => {
-    return await commonAPI("GET", `${SERVERURL}/all-books`, {}, reqHeader)
+export const getAllBooksAPI = async (search,reqHeader) => {
+    return await commonAPI("GET", `${SERVERURL}/all-books?search=${search}`, {}, reqHeader)
 }
 
 // view single book - called by view component

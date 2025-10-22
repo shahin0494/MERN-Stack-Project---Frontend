@@ -12,6 +12,9 @@ function AllBooks() {
   const [listStatus, setListStatus] = useState(false)
   const [token, setToken] = useState("")
   const [books, setBooks] = useState([])
+  const [tempBooks, setTempBooks] = useState([])
+  const [allCategories, setAllCategories] = useState([])
+  const [searchKey, setSearchKey] = useState("")
 
   console.log(books);
 
@@ -21,7 +24,7 @@ function AllBooks() {
       setToken(userToken)
       getALLBooks(userToken)
     }
-  }, [])
+  }, [searchKey])
 
   const getALLBooks = async (userToken) => {
     console.log(userToken);
@@ -30,9 +33,15 @@ function AllBooks() {
       "Authorization": `Bearer ${userToken}`
     }
     try {
-      const result = await getAllBooksAPI(reqHeader)
+      const result = await getAllBooksAPI(searchKey, reqHeader)
       if (result.status == 200) {
         setBooks(result.data)
+        setTempBooks(result.data)
+        const tempCategory = result.data.map(item => item.category)
+        //console.log(tempCategory);
+        const tempArray = [...new Set(tempCategory)]
+        //console.log(tempArray);
+        setAllCategories(tempArray)
       } else {
         console.log(result);
         toast.warning(result.response.data)
@@ -40,6 +49,15 @@ function AllBooks() {
     } catch (err) {
       console.log(err);
 
+    }
+  }
+
+  // filtering according to book category
+  const filterBooks = (category) => {
+    if (category == "No-Filter") {
+      setBooks(tempBooks)
+    } else {
+      setBooks(tempBooks?.filter(item => item.category.toLowerCase() == category.toLowerCase()))
     }
   }
 
@@ -52,7 +70,7 @@ function AllBooks() {
             <div className="flex justify-center flex-col my-5 items-center">
               <h1 className="text-3xl">Collections </h1>
               <div className="flex my-5">
-                <input type="text" className="p-2 rounded border border-gray-400 md:w-100 text-black placeholder-gray-700" placeholder='Search by Title' />
+                <input type="text" className="p-2 rounded border border-gray-400 md:w-100 text-black placeholder-gray-700" placeholder='Search by Title' onChange={e => setSearchKey(e.target.value)} />
                 <button className='bg-blue-400 ms-2 rounded w-15 md:w-20'>Search</button>
               </div>
 
@@ -66,37 +84,19 @@ function AllBooks() {
                   <button onClick={() => setListStatus(!listStatus)} className='text-2xl md:hidden'><FontAwesomeIcon icon={faBars} /></button>
                 </div>
                 <div className={listStatus ? "block" : "md:block hidden"}>
+                  {
+                    allCategories?.length > 0 &&
+                    allCategories?.map((category, index) => (
+                      <div key={index} className='mt-3'>
+                        <input type="radio" id={category} name='filter' onClick={() => filterBooks(category)} />
+                        <label className='ms-3' htmlFor={category}>{category}</label>
+                      </div>
+                    ))
+
+                  }
                   <div className='mt-3'>
-                    <input type="radio" id='literary' name='filter' />
-                    <label className='ms-3' htmlFor="literary">Literacy Fiction</label>
-                  </div>
-                  <div className='mt-3'>
-                    <input type="radio" id='literary' name='filter' />
-                    <label className='ms-3' htmlFor="literary">Philosophy</label>
-                  </div>
-                  <div className='mt-3'>
-                    <input type="radio" id='literary' name='filter' />
-                    <label className='ms-3' htmlFor="literary">Romance </label>
-                  </div>
-                  <div className='mt-3'>
-                    <input type="radio" id='literary' name='filter' />
-                    <label className='ms-3' htmlFor="literary">Mystery/Thriller</label>
-                  </div>
-                  <div className='mt-3'>
-                    <input type="radio" id='literary' name='filter' />
-                    <label className='ms-3' htmlFor="literary">Horror</label>
-                  </div>
-                  <div className='mt-3'>
-                    <input type="radio" id='literary' name='filter' />
-                    <label className='ms-3' htmlFor="literary">Auto Biography</label>
-                  </div>
-                  <div className='mt-3'>
-                    <input type="radio" id='literary' name='filter' />
-                    <label className='ms-3' htmlFor="literary">Self Help</label>
-                  </div>
-                  <div className='mt-3'>
-                    <input type="radio" id='literary' name='filter' />
-                    <label className='ms-3' htmlFor="literary">Politics</label>
+                    <input type="radio" id='noFilter' name='filter' onClick={() => filterBooks("No-Filter")} />
+                    <label className='ms-3' htmlFor="noFilter">No Filter</label>
                   </div>
                 </div>
               </div>
@@ -110,8 +110,8 @@ function AllBooks() {
                         <div key={book?._id} className='shadow p-3 rounded mx-2'>
                           <img width={'100%'} style={{ height: '350px' }} src={book?.imageUrl} alt="" />
                           <div className='flex justify-center flex-col items-center'>
-                            <p className='text-blue-400 text-lg'>{book?.author.slice(0,20)}</p>
-                            <p>{book?.title.slice(0,20)}</p>
+                            <p className='text-blue-400 text-lg'>{book?.author.slice(0, 20)}</p>
+                            <p>{book?.title.slice(0, 20)}</p>
                             <Link to={`/books/${book?._id}/view`} className='px-5 py-3 bg-blue-600 text-white rounded my-3' >View Book</Link>
                           </div>
                         </div>

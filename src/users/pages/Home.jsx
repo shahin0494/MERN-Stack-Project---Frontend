@@ -54,7 +54,7 @@ function Home() {
               homeBooks.length > 0 ?
                 homeBooks?.map((book, index) => (
                   <div key={index} className="shadow p-3 flex  flex-col rounded">
-                    <img width={'100%'} height={'300px'} src={book?.imageUrl} alt="book" />
+                    <img className='rounded' width={'100%'} height={'300px'} src={book?.imageUrl} alt="book" />
                     <div className="flex justify-center flex-col items-center ">
                       <p className="text-blue-700 font-bold text-lg">{book?.author}</p>
                       <p >{book?.title}</p>
