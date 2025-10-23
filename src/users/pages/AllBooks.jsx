@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState ,useContext } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,6 +6,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import { getAllBooksAPI } from '../../services/allAPI'
+import { searchBookContext } from '../../contextAPI/ContextShare'
 
 function AllBooks() {
 
@@ -14,7 +15,7 @@ function AllBooks() {
   const [books, setBooks] = useState([])
   const [tempBooks, setTempBooks] = useState([])
   const [allCategories, setAllCategories] = useState([])
-  const [searchKey, setSearchKey] = useState("")
+  const {searchKey, setSearchKey} = useContext(searchBookContext)
 
   console.log(books);
 
@@ -70,7 +71,7 @@ function AllBooks() {
             <div className="flex justify-center flex-col my-5 items-center">
               <h1 className="text-3xl">Collections </h1>
               <div className="flex my-5">
-                <input type="text" className="p-2 rounded border border-gray-400 md:w-100 text-black placeholder-gray-700" placeholder='Search by Title' onChange={e => setSearchKey(e.target.value)} />
+                <input type="text" className="p-2 rounded border border-gray-400 md:w-100 text-black placeholder-gray-700" placeholder='Search by Title' value={searchKey} onChange={e => setSearchKey(e.target.value)} />
                 <button className='bg-blue-400 ms-2 rounded w-15 md:w-20'>Search</button>
               </div>
 

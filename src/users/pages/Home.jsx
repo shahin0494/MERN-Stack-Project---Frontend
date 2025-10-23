@@ -1,23 +1,42 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { getHomeBooksApi } from '../../services/allAPI'
-
+import { ToastContainer, toast } from 'react-toastify'
+import { searchBookContext } from '../../contextAPI/ContextShare'
 
 
 function Home() {
 
-  
+
   const [homeBooks, setHomeBooks] = useState([])
+  const navigate = useNavigate()
+  const { searchKey, setSearchKey } = useContext(searchBookContext)
 
   useEffect(() => {
+    setSearchKey("")
     getHomeBooks()
   }, [])
 
-  console.log(homeBooks);
+  //console.log(homeBooks);
+
+  const searchBook = (bookTitle) => {
+    if (!searchKey) {
+      toast.warning("Please provide a Book Title")
+    } else if (!sessionStorage.getItem("token")) {
+      toast.warning("please login to search books !!")
+      setTimeout(() => {
+        navigate("/login")
+      }, 2500);
+    } else if (sessionStorage.getItem("token") && searchKey){
+      navigate("/all-books")
+    }else {
+      toast.error("something went wrong 🥸")
+    }
+  }
 
   const getHomeBooks = async () => {
     try {
@@ -40,8 +59,8 @@ function Home() {
         <h1 className=' text-3xl md:text-5xl text-shadow-lg font-bold'>Wonderful Gifts</h1>
         <p className='text-shadow-lg '>Give your family and friends a book !</p>
         <div className='mt-9 w-75  md:w-100 py-2 rounded-3xl ps-3 flex flex-cols px-3 justify-center items-center   bg-white'>
-          <input className='w-100 border-none outline-0  h-10 text-black me-2' type="text" placeholder='Search Books' />
-          <button>  <FontAwesomeIcon className='text-black' icon={faMagnifyingGlass} /></button>
+          <input onChange={e=>setSearchKey(e.target.value)} className='w-100 border-none outline-0  h-10 text-black me-2' type="text" placeholder='Search Books' /> 
+           <FontAwesomeIcon className='text-black' onClick={searchBook} icon={faMagnifyingGlass} />
         </div>
       </div>
       {/* arrival */}
@@ -49,25 +68,25 @@ function Home() {
         <h1 className='text-2xl font-bold' >NEW ARIVALS</h1>
         <h1 className='text-3xl'>Explore Our Latest Collections</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full mt-5">
-          
-            {
-              homeBooks.length > 0 ?
-                homeBooks?.map((book, index) => (
-                  <div key={index} className="shadow p-3 flex  flex-col rounded">
-                    <img className='rounded' width={'100%'} height={'300px'} src={book?.imageUrl} alt="book" />
-                    <div className="flex justify-center flex-col items-center ">
-                      <p className="text-blue-700 font-bold text-lg">{book?.author}</p>
-                      <p >{book?.title}</p>
-                      <p>$ {book?.discountPrice}</p>
 
-                    </div>
+          {
+            homeBooks.length > 0 ?
+              homeBooks?.map((book, index) => (
+                <div key={index} className="shadow p-3 flex  flex-col rounded">
+                  <img className='rounded' width={'100%'} height={'300px'} src={book?.imageUrl} alt="book" />
+                  <div className="flex justify-center flex-col items-center ">
+                    <p className="text-blue-700 font-bold text-lg">{book?.author}</p>
+                    <p >{book?.title}</p>
+                    <p>$ {book?.discountPrice}</p>
+
                   </div>
-                ))
+                </div>
+              ))
 
-                :
-                <p>Loading</p>
-            }
-          
+              :
+              <p>Loading</p>
+          }
+
         </div>
         <div className="text-center my-5">
           <Link to={'/all-books'} className='bg-blue-600 border hover:bg-white hover:text-blue-600 text-white p-3' >Explore More...</Link>
@@ -98,6 +117,19 @@ function Home() {
         </div>
       </section>
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      // transition={Slide}
+      />
     </>
   )
 }
