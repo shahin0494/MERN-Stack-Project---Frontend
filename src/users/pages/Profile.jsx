@@ -4,7 +4,8 @@ import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faSquarePlus } from '@fortawesome/free-regular-svg-icons'
 import { ToastContainer, toast } from 'react-toastify'
-import { addBookAPI } from '../../services/allAPI'
+import { addBookAPI, getAllUserPurchasedBooksAPI, getAllUserUploadBooksAPI, removeUserUploadBooksAPI } from '../../services/allAPI'
+import Edit from '../components/Edit'
 
 
 function Profile() {
@@ -19,12 +20,84 @@ function Profile() {
   const [preview, setPreview] = useState("")
   const [previewList, setPreviewList] = useState([])
   const [token, setToken] = useState("")
+  const [userBooks, setUserBooks] = useState([])
+  const [deleteBookStatus, setDeleteBookStatus] = useState(false)
+  const [purchaseBooks, setPurchaseBooks] = useState([])
+  const [username, SetUserName] = useState("")
+  const [userDp, setUserDp] = useState("")
+
+  console.log(userBooks);
+
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       setToken(sessionStorage.getItem("token"))
+      const user = JSON.parse(sessionStorage.getItem("user"))
+      SetUserName(user.username)
+      setUserDp(user.profile)
     }
   }, [])
+
+  useEffect(() => {
+    if (bookStatus == true) {
+      getAllUserBooks()
+    } else if (purchaseStatus == true) {
+      getAllUserBoughtBooks()
+    }
+  }, [bookStatus, deleteBookStatus, purchaseStatus])
+
+
+
+  const getAllUserBoughtBooks = async () => {
+    const reqHeader = {
+      "Authorization": `Bearer ${token}`
+    }
+    try {
+      const result = await getAllUserPurchasedBooksAPI(reqHeader)
+      if (result.status == 200) {
+        setPurchaseBooks(result.data)
+      } else {
+        console.log(result);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const removeBook = async (bookId) => {
+    const reqHeader = {
+      "Authorization": `Bearer ${token}`
+    }
+    try {
+      const result = await removeUserUploadBooksAPI(bookId, reqHeader)
+      if (result.status == 200) {
+        toast.success(result.data)
+        setDeleteBookStatus(true)
+      } else {
+        console.log(result);
+
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const getAllUserBooks = async () => {
+    const reqHeader = {
+      "Authorization": `Bearer ${token}`
+    }
+    try {
+      const result = await getAllUserUploadBooksAPI(reqHeader)
+      if (result.status == 200) {
+        setUserBooks(result.data)
+      } else {
+        console.log(result);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const handleUploadBookImage = (e) => {
     //console.log(e.target.files[0]);
@@ -93,19 +166,21 @@ function Profile() {
     }
   }
 
+
+
   return (
     <>
       <Header />
       <div style={{ height: "200px" }} className='bg-neutral-900'></div>
       <div className='bg-white p-3' style={{ width: "230px", height: "230px", borderRadius: "50%", marginLeft: "70px", marginTop: "-130px" }}>
-        <img style={{ width: "200px", height: "200px", borderRadius: "50%" }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtRs_rWILOMx5-v3aXwJu7LWUhnPceiKvvDg&s" alt="" />
+        <img style={{ width: "200px", height: "200px", borderRadius: "50%" }} src={userDp=="" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtRs_rWILOMx5-v3aXwJu7LWUhnPceiKvvDg&s" : userDp} alt="" />
       </div>
       <div className='md:flex justify-between px-20 mt-5'>
         <div className='flex justify-center items-center '>
-          <h1 className="font-bold text-5xl">Username</h1>
-          <FontAwesomeIcon className='ms-2 text-2xl mt-1 text-red-700  ' icon={faCircleCheck} />
+          <h1 className="font-bold text-5xl">{username}</h1>
+          <FontAwesomeIcon className='ms-2 text-2xl mt-1 text-blue-700  ' icon={faCircleCheck} />
         </div>
-        <div>Edit</div>
+        <Edit/>
       </div>
 
       <p className='md:px-20 px-5 my-5 text-justify'>
@@ -124,6 +199,7 @@ function Profile() {
         </div>
       </div>
       {/* contents */}
+
       {/* Sell Books */}
       {
         sellBookStatus &&
@@ -213,27 +289,39 @@ function Profile() {
         bookStatus &&
         <div className='p-10 my-20 shadow rounded'>
           {/* duplicate div according to book */}
-          <div className='p-5 rounded mt-4 bg-neutral-100'>
-            <div className='md:grid grid-cols-[3fr_1fr]'>
-              <div className='px-4'>
-                <h1 className='text-2xl'>Book Title</h1>
-                <h2 className='text-xl'>Author</h2>
-                <h3 className='text-lg'>$ 300</h3>
-                <p className="text-justify">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos fugit, deserunt nulla blanditiis aspernatur suscipit tempore autem asperiores ea, magnam a dolor aut labore maiores animi, iste fuga vero mollitia! Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repudiandae fugit cumque dolorum vitae hic eaque facere dolore! Consequatur sapiente maiores iusto tempora beatae? Nemo incidunt similique voluptatum unde cupiditate?</p>
-                <div className='flex'>
-                  <img style={{ width: "150px", height: "100px" }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjlag_31KJZKjPCyXpldwr3TGrBf1uFQmDLA&s" alt="" />
-                  <img style={{ width: "150px", height: "100px" }} src="https://media.istockphoto.com/id/948531554/vector/approved-ink-stamp.jpg?s=612x612&w=0&k=20&c=kVKJxtXo1QOxDoqTvAdxHEjuVlcRvxGN-1f6qvyimRA=" alt="" />
+          {
+            userBooks?.length > 0 ?
+              userBooks?.map((item, index) => (
+                <div key={index} className='p-5 rounded-2xl mt-4 bg-neutral-100'>
+                  <div className='md:grid grid-cols-[3fr_1fr]'>
+                    <div className='px-4 '>
+                      <h1 className='text-4xl'>{item?.title}</h1>
+                      <h2 className='text-2xl'>{item?.author}</h2>
+                      <h3 className='text-xl text-blue-600'>$ {item?.discountPrice}</h3>
+                      <p className="text-justify">{item?.abstract}</p>
 
+                      <div className='flex'>
+                        {
+                          item?.status == "pending" ?
+                            <img style={{ width: "150px", height: "100px" }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjlag_31KJZKjPCyXpldwr3TGrBf1uFQmDLA&s" alt="pending" /> :
+                            item?.status == "approved" ?
+                              <img style={{ width: "150px", height: "100px" }} src="https://media.istockphoto.com/id/948531554/vector/approved-ink-stamp.jpg?s=612x612&w=0&k=20&c=kVKJxtXo1QOxDoqTvAdxHEjuVlcRvxGN-1f6qvyimRA=" alt="approved" /> :
+                              <img style={{ width: "150px", height: "100px" }} src="https://www.enago.com/academy/wp-content/uploads/2016/05/Rejection-without-Peer-Review-Issues-and-Solutions-1280x720.jpg" alt="reject" />}
+                      </div>
+
+                    </div>
+                    <div className='px-4 mt-4 md:mt-0'>
+                      <img className='w-full' src={item?.imageUrl} alt="" />
+                      <div className='mt-5'>
+                        <button onClick={() => removeBook(item?._id)} className='py-2 px-3 rounded bg-red-600 text-white ms-3 '>Delete</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className='px-4 mt-4 md:mt-0'>
-                <img className='w-full' src="./book.jpg" alt="" />
-                <div className='mt-5'>
-                  <button className='py-2 px-3 rounded bg-red-600 text-white ms-3 '>Delete</button>
-                </div>
-              </div>
-            </div>
-          </div>
+              ))
+              :
+              <p>no books</p>
+          }
         </div>
       }
 
@@ -242,25 +330,32 @@ function Profile() {
         purchaseStatus &&
         <div className='p-10 my-20 shadow rounded'>
           {/* duplicate div according to book */}
-          <div className='p-5 rounded mt-4 bg-neutral-100'>
-            <div className='md:grid grid-cols-[3fr_1fr]'>
-              <div className='px-4'>
-                <h1 className='text-2xl'>Book Title</h1>
-                <h2 className='text-xl'>Author</h2>
-                <h3 className='text-lg'>$ 300</h3>
-                <p className="text-justify">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos fugit, deserunt nulla blanditiis aspernatur suscipit tempore autem asperiores ea, magnam a dolor aut labore maiores animi, iste fuga vero mollitia! Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero repudiandae fugit cumque dolorum vitae hic eaque facere dolore! Consequatur sapiente maiores iusto tempora beatae? Nemo incidunt similique voluptatum unde cupiditate?</p>
-                <div className='flex'>
-                  <img style={{ width: "full", height: "130" }} src="https://static.vecteezy.com/system/resources/previews/002/271/846/non_2x/red-sold-stamp-logo-vector.jpg" alt="" />
-
-
+          {
+            purchaseBooks?.length > 0 ?
+              purchaseBooks.map((item, index) => (
+                <div key={index} className='p-5 rounded mt-4 bg-neutral-100'>
+                  <div className='md:grid grid-cols-[3fr_1fr]'>
+                    <div className='px-4'>
+                      <h1 className='text-2xl'>{item?.title}</h1>
+                      <h2 className='text-xl'>{item?.author}</h2>
+                      <h3 className='text-lg'>$ {item?.discountPrice}</h3>
+                      <p className="text-justify">{item?.abstract}</p>
+                      <div className='flex'>
+                        <img style={{ width: "full", height: "130" }} src="https://static.vecteezy.com/system/resources/previews/002/271/846/non_2x/red-sold-stamp-logo-vector.jpg" alt="" />
+                      </div>
+                    </div>
+                    <div className='px-4 mt-4 md:mt-0'>
+                      <img className='w-full' src="./book.jpg" alt="" />
+                    </div>
+                  </div>
                 </div>
+              ))
+              :
+              <div className='flex justify-center items-center flex-col'>
+                <img src="https://cdn.dribbble.com/userupload/25152143/file/original-19d00f0b43ff1449812b30a9635aaf5d.gif" alt="" />
+                <p>books not purchased</p>
               </div>
-              <div className='px-4 mt-4 md:mt-0'>
-                <img className='w-full' src="./book.jpg" alt="" />
-
-              </div>
-            </div>
-          </div>
+          }
         </div>
       }
 
