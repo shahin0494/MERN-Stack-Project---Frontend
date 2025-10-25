@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { faAddressCard, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faBars, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
-
+import SERVERURL from '../../services/serverURL'
 
 
 function Header() {
@@ -62,7 +62,7 @@ function Header() {
             :
             <div className='relative inline-block text-left'>
               <button type='button' onClick={() => setDropDownStatus(!dropDownStatus)} className=' w-full bg-white px-3 py-2 shadow-xs hover:bg-gray-50'>
-                <img width={"40px"} height={"40px"} style={{ borderRadius: "50%" }} src={userDp == "" ? "https://i.pinimg.com/736x/b2/ea/a0/b2eaa0d4918d54021f9c7aa3fc3d3cf3.jpg" : userDp.startsWith("https://lh3.googleusercontent.com/") ? userDp : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCKYo2pnIn0ibbj7JiCbVr_AnZwDhPkRh1mA&s"} alt="userdp" />
+                <img width={"40px"} height={"40px"} style={{ borderRadius: "50%" }} src={userDp == "" ? "https://i.pinimg.com/736x/b2/ea/a0/b2eaa0d4918d54021f9c7aa3fc3d3cf3.jpg" : userDp.startsWith("https://lh3.googleusercontent.com/") ? userDp :`${SERVERURL}/uploads/${userDp}`} alt="userdp" />
               </button>
               {
                 dropDownStatus &&
@@ -90,7 +90,7 @@ function Header() {
             :
             <div className='relative inline-block text-left'>
               <button type='button' onClick={() => setDropDownStatus(!dropDownStatus)} className=' w-full bg-white px-3 py-2 shadow-xs hover:bg-gray-50'>
-                <img width={"40px"} height={"40px"} style={{ borderRadius: "50%" }} src={userDp == "" ? "https://i.pinimg.com/736x/b2/ea/a0/b2eaa0d4918d54021f9c7aa3fc3d3cf3.jpg" : userDp.startsWith("https://lh3.googleusercontent.com/") ? userDp : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCKYo2pnIn0ibbj7JiCbVr_AnZwDhPkRh1mA&s"} alt="userdp" />
+                 <img width={"40px"} height={"40px"} style={{ borderRadius: "50%" }} src={userDp == "" ? "https://i.pinimg.com/736x/b2/ea/a0/b2eaa0d4918d54021f9c7aa3fc3d3cf3.jpg" : userDp.startsWith("https://lh3.googleusercontent.com/") ? userDp :`${SERVERURL}/uploads/${userDp}`} alt="userdp" />
               </button>
               {
                 dropDownStatus &&

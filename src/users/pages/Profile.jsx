@@ -6,6 +6,7 @@ import { faCircleCheck, faSquarePlus } from '@fortawesome/free-regular-svg-icons
 import { ToastContainer, toast } from 'react-toastify'
 import { addBookAPI, getAllUserPurchasedBooksAPI, getAllUserUploadBooksAPI, removeUserUploadBooksAPI } from '../../services/allAPI'
 import Edit from '../components/Edit'
+import SERVERURL from '../../services/serverURL'
 
 
 function Profile() {
@@ -173,14 +174,14 @@ function Profile() {
       <Header />
       <div style={{ height: "200px" }} className='bg-neutral-900'></div>
       <div className='bg-white p-3' style={{ width: "230px", height: "230px", borderRadius: "50%", marginLeft: "70px", marginTop: "-130px" }}>
-        <img style={{ width: "200px", height: "200px", borderRadius: "50%" }} src={userDp=="" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtRs_rWILOMx5-v3aXwJu7LWUhnPceiKvvDg&s" : userDp} alt="" />
+        <img style={{ width: "200px", height: "200px", borderRadius: "50%" }} src={userDp == "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtRs_rWILOMx5-v3aXwJu7LWUhnPceiKvvDg&s" : userDp.startsWith("https://lh3.googleusercontent.com/") ? userDp : `${SERVERURL}/uploads/${userDp}`} alt="userdp" />
       </div>
       <div className='md:flex justify-between px-20 mt-5'>
         <div className='flex justify-center items-center '>
           <h1 className="font-bold text-5xl">{username}</h1>
           <FontAwesomeIcon className='ms-2 text-2xl mt-1 text-blue-700  ' icon={faCircleCheck} />
         </div>
-        <Edit/>
+        <Edit />
       </div>
 
       <p className='md:px-20 px-5 my-5 text-justify'>
