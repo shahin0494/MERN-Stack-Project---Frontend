@@ -71,6 +71,9 @@ export const updateUserProfileAPI = async (reqBody,reqHeader)=>{
 
 // list books
 
-// list users
+// list users - called by collection admin component
+export const getAllUsersAPI = async (reqHeader)=>{
+    return await commonAPI("GET",`${SERVERURL}/all-user`,{},reqHeader)
+}
 
 // approve boooks

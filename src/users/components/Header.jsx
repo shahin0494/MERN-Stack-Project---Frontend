@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faFacebookF, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { faAddressCard, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faBars, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import SERVERURL from '../../services/serverURL'
+import { userUpdateContext } from '../../contextAPI/ContextShare';
 
 
 function Header() {
@@ -14,6 +15,7 @@ function Header() {
   const [userDp, setUserDp] = useState("")
   const [dropDownStatus, setDropDownStatus] = useState(false)
   const navigate = useNavigate()
+  const {userEditResponse, setUserEditResponse} = useContext(userUpdateContext)
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
@@ -24,7 +26,7 @@ function Header() {
 
       setUserDp(user.profile)
     }
-  },[token])
+  },[token,userEditResponse])
 
   const logout = () => {
     sessionStorage.clear()
