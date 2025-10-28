@@ -3,15 +3,18 @@ import AdminHead from '../Components/AdminHead'
 import Footer from '../../components/Footer'
 import AdminSideBar from '../Components/AdminSideBar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPen, faUser } from '@fortawesome/free-solid-svg-icons'
-import { getAllUsersAPI } from '../../services/allAPI'
+import { faCheck, faPen, faUser } from '@fortawesome/free-solid-svg-icons'
+import { getAllUsersAPI, listAllBookAdminsAPI, updateBookStatusAPI } from '../../services/allAPI'
 import SERVERURL from '../../services/serverURL'
-
 function ResourceAdmin() {
   const [bookListStatus, setBookListStatus] = useState(true)
   const [usersListStatus, setUsersListStatus] = useState(false)
   const [allUsers, setAllUsers] = useState([])
+  const [userBooks, setUserBooks] = useState([])
+  const [updateBookStatus, setUpdateBookStatus] = useState([])
   // const [token, setToken] = useState("")
+  console.log(userBooks);
+
 
   console.log(allUsers);
 
@@ -20,14 +23,14 @@ function ResourceAdmin() {
       const token = sessionStorage.getItem("token")
       // setToken(token)
       if (bookListStatus == true) {
-
+        getAllBooks(token)
       } else if (usersListStatus == true) {
         getAllUsers(token)
       } else {
         console.log("something went wrong");
       }
     }
-  }, [usersListStatus])
+  }, [usersListStatus, updateBookStatus])
 
   const getAllUsers = async (userToken) => {
     const reqHeader = {
@@ -40,6 +43,33 @@ function ResourceAdmin() {
       } else {
         console.log(result);
       }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const getAllBooks = async (userToken) => {
+    const reqHeader = {
+      "Authorization": `Bearer ${userToken}`
+    }
+
+    try {
+      const result = await listAllBookAdminsAPI(reqHeader)
+      setUserBooks(result.data)
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
+  const approveBook = async (book) => {
+    const userToken = sessionStorage.getItem("token")
+    const reqHeader = {
+      "Authorization": `Bearer ${userToken}`
+    }
+    try {
+      const result = await updateBookStatusAPI(book,reqHeader)
+      setUpdateBookStatus(result.data)
     } catch (err) {
       console.log(err);
     }
@@ -67,73 +97,35 @@ function ResourceAdmin() {
             {/* booklist */}
             {
               bookListStatus &&
-              <div className="md:grid grid-cols-4 w-full mt-5">
-                <div className="p-3">
-                  <div className="shadow p-3 rounded">
-                    <img width={'100%'} height={'300px'} src="https://s26162.pcdn.co/wp-content/uploads/2018/02/gatsby-original2.jpg" alt="book" />
-                    <div className="flex justify-center flex-col items-center ">
-                      <p className="text-blue-700 font-bold text-lg">Author</p>
-                      <p >Book Title</p>
-                      <p>$ 400</p>
+              <div className="md:grid grid-cols-4 w-full mt-5 ">
+                {
+                  userBooks?.length > 0 ?
+                    userBooks?.map((item, index) => (
 
-                    </div>
-                  </div>
-                </div>
-                <div className="p-3">
-                  <div className="shadow p-3 rounded">
-                    <img width={'100%'} height={'300px'} src="https://www.papertrue.com/blog/wp-content/uploads/2023/11/461984.jpg" alt="book" />
-                    <div className="flex justify-center flex-col items-center ">
-                      <p className="text-blue-700 font-bold text-lg">Author</p>
-                      <p >Book Title</p>
-                      <p>$ 400</p>
-
-                    </div>
-                  </div>
-                </div>
-                <div className="p-3">
-                  <div className="shadow p-3 rounded">
-                    <img width={'100%'} height={'300px'} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGh8nYLLj5J3DOWqfY44wkyt2njH8Rwa1u1A&s" alt="book" />
-                    <div className="flex justify-center flex-col items-center ">
-                      <p className="text-blue-700 font-bold text-lg">Author</p>
-                      <p >Book Title</p>
-                      <p>$ 400</p>
-
-                    </div>
-                  </div>
-                </div>
-                <div className="p-3">
-                  <div className="shadow p-3 rounded">
-                    <img width={'100%'} height={'300px'} src="https://s26162.pcdn.co/wp-content/uploads/2021/10/3b47d124002685f2a3c67e47383232c7.jpg" alt="book" />
-                    <div className="flex justify-center flex-col items-center ">
-                      <p className="text-blue-700 font-bold text-lg">Author</p>
-                      <p >Book Title</p>
-                      <p>$ 400</p>
-
-                    </div>
-                  </div>
-                </div>
-                <div className="p-3">
-                  <div className="shadow p-3 rounded">
-                    <img width={'100%'} height={'300px'} src="https://thebooksatchel.com/wp-content/uploads/2020/07/follow-me-to-the-ground.jpg" alt="book" />
-                    <div className="flex justify-center flex-col items-center ">
-                      <p className="text-blue-700 font-bold text-lg">Author</p>
-                      <p >Book Title</p>
-                      <p>$ 400</p>
-
-                    </div>
-                  </div>
-                </div>
-                <div className="p-3">
-                  <div className="shadow p-3 rounded">
-                    <img width={'100%'} height={'300px'} src="https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/09172447/shadow-and-bone.png" alt="book" />
-                    <div className="flex justify-center flex-col items-center ">
-                      <p className="text-blue-700 font-bold text-lg">Author</p>
-                      <p >Book Title</p>
-                      <p>$ 400</p>
-
-                    </div>
-                  </div>
-                </div>
+                      <div key={index} className="p-3  ">
+                        <div className="shadow-lg bg-neutral-100/50 p-3 h-fit rounded ">
+                          <img width={'100%'} height={'300px'} className='rounded-xl' src={item?.imageUrl} alt="book" />
+                          <div className="flex justify-center flex-col items-start ">
+                            <p className="text-blue-700 mt-3 font-bold text-lg">{item?.author}      <hr className='text-neutral-300 mb-2' /></p>
+                            <p >{item?.title}</p>
+                            <p className='text-lg text-neutral-500/90'>$ {item?.discountPrice}</p>
+                            {
+                              item?.status == "pending" &&
+                              <button onClick={()=>approveBook(item)} className='p-3 mt-2 rounded bg-green-700 w-full text-white'>Approve</button>
+                            }
+                            {
+                              item?.status == "approved" &&
+                              <div className='flex justify-start  p-3 border border-green-400 rounded'>
+                                <img width={"20px"} height={"40px"} src="https://cdn-icons-png.flaticon.com/512/62/62025.png" alt="" />
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                    :
+                    <div>no books </div>
+                }
               </div>
             }
 
@@ -149,7 +141,7 @@ function ResourceAdmin() {
                         <div className="shadow p-3  bg-neutral-200 rounded">
                           <p className='text-red-600 text-lg '>ID : {user?._id}</p>
                           <div className="flex ">
-                            <img style={{ width: "100px", height: "100px", borderRadius: "50%" }} src={user?.profile?`${SERVERURL}/uploads/${user?.profile}`: "https://tse1.mm.bing.net/th/id/OIP.w-f-qDRUjGt9e_SuPTcfcgHaHw?pid=Api&P=0&h=180" } alt="user" />
+                            <img style={{ width: "100px", height: "100px", borderRadius: "50%" }} src={user?.profile ? `${SERVERURL}/uploads/${user?.profile}` : "https://tse1.mm.bing.net/th/id/OIP.w-f-qDRUjGt9e_SuPTcfcgHaHw?pid=Api&P=0&h=180"} alt="user" />
                             <div className='flex flex-col justify-center bg-neutral-100/50 rounded-2xl px-5  items-start text-lg ml-6'>
                               <p className='text-sky-700  text-start'>{user?.username}</p>
                               <p>{user?.email}</p>

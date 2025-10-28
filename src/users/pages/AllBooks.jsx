@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,7 +15,7 @@ function AllBooks() {
   const [books, setBooks] = useState([])
   const [tempBooks, setTempBooks] = useState([])
   const [allCategories, setAllCategories] = useState([])
-  const {searchKey, setSearchKey} = useContext(searchBookContext)
+  const { searchKey, setSearchKey } = useContext(searchBookContext)
 
   console.log(books);
 
@@ -108,7 +108,7 @@ function AllBooks() {
                   {
                     books.length > 0 ?
                       books.map(book => (
-                        <div key={book?._id} className='shadow p-3 rounded mx-2'>
+                        <div key={book?._id} className='shadow-md bg-neutral-100/50 p-3 rounded mx-2' hidden={book?.status == "pending" || book?.status == "sold"}>
                           <img width={'100%'} style={{ height: '350px' }} src={book?.imageUrl} alt="" />
                           <div className='flex justify-center flex-col items-center'>
                             <p className='text-blue-400 text-lg'>{book?.author.slice(0, 20)}</p>
@@ -119,7 +119,6 @@ function AllBooks() {
                       ))
                       :
                       <p>no books</p>
-
                   }
                 </div>
               </div>

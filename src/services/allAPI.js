@@ -31,7 +31,7 @@ export const addBookAPI = async (reqBody, reqHeader) => {
 }
 
 // view all book - called by allbooks when page is loaded
-export const getAllBooksAPI = async (search,reqHeader) => {
+export const getAllBooksAPI = async (search, reqHeader) => {
     return await commonAPI("GET", `${SERVERURL}/all-books?search=${search}`, {}, reqHeader)
 }
 
@@ -51,13 +51,13 @@ export const getAllUserPurchasedBooksAPI = async (reqHeader) => {
 }
 
 //  remove user upload books - called by profile component
-export const removeUserUploadBooksAPI = async (bookId,reqHeader) => {
+export const removeUserUploadBooksAPI = async (bookId, reqHeader) => {
     return await commonAPI("DELETE", `${SERVERURL}/user-books/${bookId}/remove`, {}, reqHeader)
 }
 
 // user profile update
-export const updateUserProfileAPI = async (reqBody,reqHeader)=>{
-    return await commonAPI("PUT",`${SERVERURL}/user-profile/edit`,reqBody,reqHeader)
+export const updateUserProfileAPI = async (reqBody, reqHeader) => {
+    return await commonAPI("PUT", `${SERVERURL}/user-profile/edit`, reqBody, reqHeader)
 }
 
 // profile update
@@ -70,10 +70,16 @@ export const updateUserProfileAPI = async (reqBody,reqHeader)=>{
 // update admin
 
 // list books
-
-// list users - called by collection admin component
-export const getAllUsersAPI = async (reqHeader)=>{
-    return await commonAPI("GET",`${SERVERURL}/all-user`,{},reqHeader)
+export const listAllBookAdminsAPI = async (reqHeader) => {
+    return await commonAPI("GET", `${SERVERURL}/admin-all-books`, {}, reqHeader)
 }
 
-// approve boooks
+// list users - called by collection admin component
+export const getAllUsersAPI = async (reqHeader) => {
+    return await commonAPI("GET", `${SERVERURL}/all-user`, {}, reqHeader)
+}
+
+// approve boooks - called when approve button clicked frim admin component
+export const updateBookStatusAPI = async (reqBody,reqHeader) => {
+    return await commonAPI("PUT", `${SERVERURL}/admin/book/approve`, reqBody,reqHeader)
+}
