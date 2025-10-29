@@ -1,10 +1,28 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { faBagShopping, faBars, faBook, faHome, faScrewdriverWrench, faUser } from '@fortawesome/free-solid-svg-icons'
+import { adminUpdateContext } from '../../contextAPI/ContextShare'
+import SERVERURL from '../../services/serverURL'
 
 function AdminSideBar() {
+
+
   const [listStatus, setListStatus] = useState(false)
+  const [adminName,setAdminName] = useState("")
+  const {adminEditResponse, setAdminEditResponse} = useContext(adminUpdateContext)
+  const [dp, setDp] = useState("https://tse1.mm.bing.net/th/id/OIP.w-f-qDRUjGt9e_SuPTcfcgHaHw?pid=Api&P=0&h=180")
+
+
+  useEffect(() => {
+    if (sessionStorage.getItem("user")) {
+      const user = JSON.parse(sessionStorage.getItem("user"))
+      setDp(user.profile)
+      setAdminName(user.username)
+    }
+  }, [adminEditResponse])
+
+
   return (
     <>
 
@@ -13,8 +31,8 @@ function AdminSideBar() {
           {/* menu bar and login */}
 
           <div className='flex md:items-center  flex-col '>
-            <img className='border ' src='https://tse1.mm.bing.net/th/id/OIP.w-f-qDRUjGt9e_SuPTcfcgHaHw?pid=Api&P=0&h=180' alt='user admin logo' style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
-            <p className='my-2'>User Name</p>
+            <img className='border ' src={dp == "" ? 'https://tse1.mm.bing.net/th/id/OIP.w-f-qDRUjGt9e_SuPTcfcgHaHw?pid=Api&P=0&h=180' : `${SERVERURL}/uploads/${dp}`} alt='user admin logo' style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+            <p className='my-2'>{adminName}</p>
           </div>
           <div className="flex justify-between items-center md:hidden">
             <button onClick={() => setListStatus(!listStatus)} ><FontAwesomeIcon icon={faBars} /></button>
@@ -48,7 +66,7 @@ function AdminSideBar() {
 
               <Link to={'/admin-settings'}  > <label htmlFor="Settings">
                 <FontAwesomeIcon icon={faScrewdriverWrench} className='mx-2' />
-                  Settings
+                Settings
               </label></Link>
 
             </li>
