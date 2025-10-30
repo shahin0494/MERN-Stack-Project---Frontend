@@ -21,7 +21,10 @@ export const getHomeBooksApi = async () => {
     return await commonAPI("GET", `${SERVERURL}/home-books`)
 }
 
-// all career api 
+// all jobs api 
+export const getAllJobAPI = async (searchKey)=>{
+    return await commonAPI("GET",`${SERVERURL}/all-job?search=${searchKey}`)
+}
 
 // -----------authorised user api - user -------------------------------
 
@@ -65,7 +68,15 @@ export const updateUserProfileAPI = async (reqBody, reqHeader) => {
 
 // -------------authorised user api - admin -------------------
 
-// add career
+// add job
+export const addJobsAPI = async (reqBody,reqHeader)=>{
+    return await commonAPI("POST", `${SERVERURL}/add-job`, reqBody, reqHeader)
+}
+
+// delete job
+export const removeJobsAPI = async (jobId,reqHeader)=>{
+    return await commonAPI("DELETE", `${SERVERURL}/job/${jobId}/remove`, {}, reqHeader)
+}
 
 // update admin
 export const updateAdminProfileAPI = async (reqBody,reqHeader)=>{
@@ -86,3 +97,4 @@ export const getAllUsersAPI = async (reqHeader) => {
 export const updateBookStatusAPI = async (reqBody,reqHeader) => {
     return await commonAPI("PUT", `${SERVERURL}/admin/book/approve`, reqBody,reqHeader)
 }
+

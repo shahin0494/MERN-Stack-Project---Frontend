@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminHead from '../Components/AdminHead'
 import Footer from '../../components/Footer'
 import AdminSideBar from '../Components/AdminSideBar'
@@ -6,11 +6,51 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightFromBracket, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { faSquareUpRight, faLocationDot, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
+import AddJob from '../Components/AddJob'
+import { getAllJobAPI } from '../../services/allAPI'
 
 
 function CareerAdmin() {
   const [jobListStatus, setJobListStatus] = useState(true)
   const [listApplicationStatus, setListApplicationStatus] = useState(false)
+  const [allJobs,setAllJobs] = useState([])
+  const [searchKey,setSearchKey] = useState("")
+  const [deleteJobResponse,setDeleteJobResponse] = useState({})
+
+  console.log(allJobs);
+  
+  
+  useEffect(()=>{
+    if (jobListStatus==true) {
+      getAllJobs()
+    }
+  },[searchKey])
+
+  const getAllJobs = async ()=>{
+    try {
+      const result = await getAllJobAPI(searchKey)
+      if (result.status == 200) {
+        setAllJobs(result.data)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const removeJob = async (id)=>{
+    const token = sessionStorage.getItem("token")
+    if (token) {
+      const reqHeader = {
+        "Authorization" : `Bearer ${token}`
+      }
+      try {
+        
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
   return (
     <>
       <AdminHead />
@@ -36,58 +76,39 @@ function CareerAdmin() {
               <div>
                 <div className='flex  justify-center md:justify-between my-5 items-center'>
                   <div className='flex w-20 md:w-full'>
-                    <input type="text" className='p-2 me-2 rounded border border-gray-400 text-black w-100 placeholder-gray-400' placeholder='Job Title' />
+                    <input onChange={e=>setSearchKey(e.target.value)} type="text" className='p-2 me-2 rounded border border-gray-400 text-black w-100 placeholder-gray-400' placeholder='Job Title' />
                     <button className='md:px-5 px-2 md:py-2 bg-[#327E32] text-white'>Search</button>
                   </div>
                   <div>
-                    <button className='md:px-5 px-3 py-2 flex bg-blue-700 hover:bg-white border border-blue-500 hover:text-blue-500 font-bold text-white'>Apply <FontAwesomeIcon icon={faPlus} className='text-xl' /></button>
+                    <button className='me-5' ><AddJob/></button>
                   </div>
 
                 </div>
                 {/* lists */}
 
-                <div className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
+                {
+                  allJobs?.length>0 ?
+                  allJobs.map(job=>(
+                    <div key={job?._id} className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
                   <div className='  flex justify-between'>
-                    <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>Job Title</h1>
+                    <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>{job?.title}</h1>
                     <button className=' text-white rounded bg-red-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Delete<FontAwesomeIcon icon={faTrashCan} className='ms-3' /></button>
                   </div>
                   <hr className='  md:w-330 mt-5 text-slate-400' />
                   <div className='mt-5 text-gray-600'>
-                    <h1 className='text-l mt-3 text-sky-500'> <FontAwesomeIcon icon={faLocationDot} /> Kochi</h1>
-                    <h1 className='text-l mt-3'>Job Type : Senior Level</h1>
-                    <h1 className='text-l mt-3'>Qualification : M-tech,B-tech,MCA</h1>
-                    <h1 className='text-l mt-3'>Experience : 5 - 7 Years</h1>
-                    <p className='text-l mt-3 text-justify ' >Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur eum laboriosam tempora officia ipsam excepturi placeat corporis, itaque numquam dolore accusantium perferendis exercitationem laudantium odio at! Assumenda sunt ea cum. </p>
+                    <h1 className='text-l mt-3 text-sky-500'> <FontAwesomeIcon icon={faLocationDot} /> {job?.location}</h1>
+                    <h1 className='text-l mt-3'>Job Type : {job?.jobType}</h1>
+                    <h1 className='text-l mt-3'>Job Type : {job?.salary}</h1>
+                    <h1 className='text-l mt-3'>Qualification : {job?.qualification}</h1>
+                    <h1 className='text-l mt-3'>Experience : {job?.experience}</h1>
+                    <p className='text-l mt-3 text-justify ' >Description : {job?.description} </p>
                   </div>
                 </div>
-                <div className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
-                  <div className='  flex justify-between'>
-                    <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>Job Title</h1>
-                    <button className=' text-white rounded bg-red-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Delete<FontAwesomeIcon icon={faTrashCan} className='ms-3' /></button>
-                  </div>
-                  <hr className='  md:w-330 mt-5 text-slate-400' />
-                  <div className='mt-5 text-gray-600'>
-                    <h1 className='text-l mt-3 text-sky-500'> <FontAwesomeIcon icon={faLocationDot} /> Kochi</h1>
-                    <h1 className='text-l mt-3'>Job Type : Senior Level</h1>
-                    <h1 className='text-l mt-3'>Qualification : M-tech,B-tech,MCA</h1>
-                    <h1 className='text-l mt-3'>Experience : 5 - 7 Years</h1>
-                    <p className='text-l mt-3 text-justify ' >Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur eum laboriosam tempora officia ipsam excepturi placeat corporis, itaque numquam dolore accusantium perferendis exercitationem laudantium odio at! Assumenda sunt ea cum. </p>
-                  </div>
-                </div>
-                <div className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded mb-5 border-gray-300'>
-                  <div className='  flex justify-between'>
-                    <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>Job Title</h1>
-                    <button className=' text-white rounded bg-red-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Delete<FontAwesomeIcon icon={faTrashCan} className='ms-3' /></button>
-                  </div>
-                  <hr className='  md:w-330 mt-5 text-slate-400' />
-                  <div className='mt-5 text-gray-600'>
-                    <h1 className='text-l mt-3 text-sky-500'> <FontAwesomeIcon icon={faLocationDot} /> Kochi</h1>
-                    <h1 className='text-l mt-3'>Job Type : Senior Level</h1>
-                    <h1 className='text-l mt-3'>Qualification : M-tech,B-tech,MCA</h1>
-                    <h1 className='text-l mt-3'>Experience : 5 - 7 Years</h1>
-                    <p className='text-l mt-3 text-justify ' >Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur eum laboriosam tempora officia ipsam excepturi placeat corporis, itaque numquam dolore accusantium perferendis exercitationem laudantium odio at! Assumenda sunt ea cum. </p>
-                  </div>
-                </div>
+                  ))
+                  :
+                  <div>No jobs added currently</div>
+                }
+
               </div>
             }
 
