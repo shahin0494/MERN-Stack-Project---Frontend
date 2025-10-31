@@ -1,12 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { faSquareUpRight, faLocationDot, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { getAllJobAPI } from '../../services/allAPI'
 
 function Careers() {
   const [modalStatus, setModalStatus] = useState(false)
+  const [allJobs, setAllJobs] = useState([])
+  const [searchKey, setSearchKey] = useState([])
+
+
+  useEffect(() => {
+    getAllJobs()
+  }, [searchKey])
+
+  const getAllJobs = async () => {
+    try {
+      const result = await getAllJobAPI(searchKey)
+      if (result.status == 200) {
+        setAllJobs(result.data)
+      } else {
+        console.log(result);
+      }
+    } catch (err) {
+      console.log(err);
+
+    }
+  }
+
   return (
     <>
       <Header />
@@ -19,52 +42,32 @@ function Careers() {
       <div className='py-5 flex flex-col px-10'>
         <h1 className='text-xl'>Current Openings</h1> <hr className='w-38.5 mt-2' />
         <div className="flex items-center justify-center my-5">
-          <input type="text" className="p-2 rounded border border-gray-400 w-100 text-black placeholder-gray-700" placeholder='Search by Title' />
-          <button className='bg-cyan-500 ms-2 text-white rounded w-25 md:w-20 h-10.5'>Search</button>
+          <input onChange={(e) => setSearchKey(e.target.value)} type="text" className="p-2 rounded border border-gray-400 w-100 text-black placeholder-gray-700" placeholder='Search by Title' />
+          <button  className='bg-cyan-500 ms-2 text-white rounded w-25 md:w-20 h-10.5'>Search</button>
         </div>
         {/* job details div */}
-        <div className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
-          <div className='  flex justify-between'>
-            <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>Job Title</h1>
-            <button onClick={()=>setModalStatus(true)} className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
-          </div>
-          <hr className='  md:w-330 mt-5 text-slate-400' />
-          <div className='mt-5 text-gray-600'>
-            <h1 className='text-l mt-3'> <FontAwesomeIcon icon={faLocationDot} /> Location</h1>
-            <h1 className='text-l mt-3'>Job Type : Senior Level</h1>
-            <h1 className='text-l mt-3'>Qualification : M-tech,B-tech,MCA</h1>
-            <h1 className='text-l mt-3'>Experience : 5 - 7 Years</h1>
-            <p className='text-l mt-3 text-justify ' >Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur eum laboriosam tempora officia ipsam excepturi placeat corporis, itaque numquam dolore accusantium perferendis exercitationem laudantium odio at! Assumenda sunt ea cum. </p>
-          </div>
-        </div>
-        <div className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
-          <div className='  flex justify-between'>
-            <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>Job Title</h1>
-            <button onClick={()=>setModalStatus(true)} className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
-          </div>
-          <hr className='  md:w-330 mt-5 text-slate-400' />
-          <div className='mt-5 text-gray-600'>
-            <h1 className='text-l mt-3'> <FontAwesomeIcon icon={faLocationDot} /> Location</h1>
-            <h1 className='text-l mt-3'>Job Type : Senior Level</h1>
-            <h1 className='text-l mt-3'>Qualification : M-tech,B-tech,MCA</h1>
-            <h1 className='text-l mt-3'>Experience : 5 - 7 Years</h1>
-            <p className='text-l mt-3 text-justify ' >Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur eum laboriosam tempora officia ipsam excepturi placeat corporis, itaque numquam dolore accusantium perferendis exercitationem laudantium odio at! Assumenda sunt ea cum. </p>
-          </div>
-        </div>
-        <div className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
-          <div className='  flex justify-between'>
-            <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>Job Title</h1>
-            <button onClick={()=>setModalStatus(true)} className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
-          </div>
-          <hr className='  md:w-330 mt-5 text-slate-400' />
-          <div className='mt-5 text-gray-600'>
-            <h1 className='text-l mt-3'> <FontAwesomeIcon icon={faLocationDot} /> Location</h1>
-            <h1 className='text-l mt-3'>Job Type : Senior Level</h1>
-            <h1 className='text-l mt-3'>Qualification : M-tech,B-tech,MCA</h1>
-            <h1 className='text-l mt-3'>Experience : 5 - 7 Years</h1>
-            <p className='text-l mt-3 text-justify ' >Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur eum laboriosam tempora officia ipsam excepturi placeat corporis, itaque numquam dolore accusantium perferendis exercitationem laudantium odio at! Assumenda sunt ea cum. </p>
-          </div>
-        </div>
+        {
+          allJobs.length > 0 ?
+            allJobs.map((item, index) => (
+              <div key={index} className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
+                <div className='  flex justify-between'>
+                  <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>{item?.title}</h1>
+                  <button onClick={() => setModalStatus(true)} className=' text-white rounded bg-sky-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Apply now <FontAwesomeIcon icon={faArrowRightFromBracket} className='ms-3' /></button>
+                </div>
+                <hr className='  md:w-330 mt-5 text-slate-400' />
+                <div className='mt-5 text-gray-600'>
+                  <h1 className='text-l mt-3 text-sky-500'> <FontAwesomeIcon icon={faLocationDot} /> {item?.location}</h1>
+                  <h1 className='text-l mt-3'>Job Type : {item?.jobType}</h1>
+                  <h1 className='text-l mt-3'>Job Type : {item?.salary}</h1>
+                  <h1 className='text-l mt-3'>Qualification : {item?.qualification}</h1>
+                  <h1 className='text-l mt-3'>Experience : {item?.experience}</h1>
+                  <p className='text-l mt-3 text-justify ' >Description : {item?.description} </p>
+                </div>
+              </div>
+            ))
+            :
+            <div>no openings currently</div>
+        }
       </div>
 
       {/* modal  */}
@@ -131,7 +134,7 @@ function Careers() {
           </div>
         </div>}
 
-        
+
 
       <Footer />
     </>

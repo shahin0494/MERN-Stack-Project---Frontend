@@ -75,7 +75,7 @@ export const addJobsAPI = async (reqBody,reqHeader)=>{
 
 // delete job
 export const removeJobsAPI = async (jobId,reqHeader)=>{
-    return await commonAPI("DELETE", `${SERVERURL}/job/${jobId}/remove`, {}, reqHeader)
+    return await commonAPI("DELETE",`${SERVERURL}/job/${jobId}/remove`,{}, reqHeader)
 }
 
 // update admin

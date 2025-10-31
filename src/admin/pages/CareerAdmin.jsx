@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AdminHead from '../Components/AdminHead'
 import Footer from '../../components/Footer'
 import AdminSideBar from '../Components/AdminSideBar'
@@ -7,26 +7,28 @@ import { faArrowRightFromBracket, faTrashCan } from '@fortawesome/free-solid-svg
 import { faSquareUpRight, faLocationDot, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import AddJob from '../Components/AddJob'
-import { getAllJobAPI } from '../../services/allAPI'
+import { getAllJobAPI, removeJobsAPI } from '../../services/allAPI'
+import { jobContext } from '../../contextAPI/ContextShare'
 
 
 function CareerAdmin() {
   const [jobListStatus, setJobListStatus] = useState(true)
   const [listApplicationStatus, setListApplicationStatus] = useState(false)
-  const [allJobs,setAllJobs] = useState([])
-  const [searchKey,setSearchKey] = useState("")
-  const [deleteJobResponse,setDeleteJobResponse] = useState({})
+  const [allJobs, setAllJobs] = useState([])
+  const [searchKey, setSearchKey] = useState("")
+  const [deleteJobResponse, setDeleteJobResponse] = useState({})
+  const {addjobResponse, setAddJobResponse} = useContext(jobContext)
 
   console.log(allJobs);
-  
-  
-  useEffect(()=>{
-    if (jobListStatus==true) {
+
+
+  useEffect(() => {
+    if (jobListStatus == true) {
       getAllJobs()
     }
-  },[searchKey])
+  }, [searchKey, deleteJobResponse,addjobResponse])
 
-  const getAllJobs = async ()=>{
+  const getAllJobs = async () => {
     try {
       const result = await getAllJobAPI(searchKey)
       if (result.status == 200) {
@@ -37,14 +39,19 @@ function CareerAdmin() {
     }
   }
 
-  const removeJob = async (id)=>{
+  const removeJob = async (id) => {
     const token = sessionStorage.getItem("token")
     if (token) {
       const reqHeader = {
-        "Authorization" : `Bearer ${token}`
+        "Authorization": `Bearer ${token}`
       }
       try {
-        
+        const result = await removeJobsAPI(id, reqHeader)
+        console.log(result);
+
+        if (result.status == 200) {
+          setDeleteJobResponse(result.data)
+        }
       } catch (err) {
         console.log(err);
       }
@@ -74,39 +81,39 @@ function CareerAdmin() {
             {
               jobListStatus &&
               <div>
-                <div className='flex  justify-center md:justify-between my-5 items-center'>
+                <div className='flex  justify-center md:justify-between my-5 mx-5 items-center'>
                   <div className='flex w-20 md:w-full'>
-                    <input onChange={e=>setSearchKey(e.target.value)} type="text" className='p-2 me-2 rounded border border-gray-400 text-black w-100 placeholder-gray-400' placeholder='Job Title' />
-                    <button className='md:px-5 px-2 md:py-2 bg-[#327E32] text-white'>Search</button>
+                    <input onChange={e => setSearchKey(e.target.value)} type="text" className='p-2 me-2 rounded border border-gray-400 text-black w-100 placeholder-gray-400' placeholder='Job Title' />
+                    <button  className='md:px-5 px-2 md:py-2 bg-[#327E32] text-white'>Search</button>
                   </div>
-                  <div>
-                    <button className='me-5' ><AddJob/></button>
+                  <div >
+                    <AddJob />
                   </div>
 
                 </div>
                 {/* lists */}
 
                 {
-                  allJobs?.length>0 ?
-                  allJobs.map(job=>(
-                    <div key={job?._id} className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
-                  <div className='  flex justify-between'>
-                    <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>{job?.title}</h1>
-                    <button className=' text-white rounded bg-red-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-sky-600 hover:border  hover:border-sky-600 '>Delete<FontAwesomeIcon icon={faTrashCan} className='ms-3' /></button>
-                  </div>
-                  <hr className='  md:w-330 mt-5 text-slate-400' />
-                  <div className='mt-5 text-gray-600'>
-                    <h1 className='text-l mt-3 text-sky-500'> <FontAwesomeIcon icon={faLocationDot} /> {job?.location}</h1>
-                    <h1 className='text-l mt-3'>Job Type : {job?.jobType}</h1>
-                    <h1 className='text-l mt-3'>Job Type : {job?.salary}</h1>
-                    <h1 className='text-l mt-3'>Qualification : {job?.qualification}</h1>
-                    <h1 className='text-l mt-3'>Experience : {job?.experience}</h1>
-                    <p className='text-l mt-3 text-justify ' >Description : {job?.description} </p>
-                  </div>
-                </div>
-                  ))
-                  :
-                  <div>No jobs added currently</div>
+                  allJobs?.length > 0 ?
+                    allJobs.map(job => (
+                      <div key={job?._id} className='md:px-10 px-5 md:py-10 mt-5 py-5 border rounded border-gray-300'>
+                        <div className='  flex justify-between'>
+                          <h1 className=' text-lg md:text-2xl md:mt-3 mt-2 text-gray-500'>{job?.title}</h1>
+                          <button type='button' onClick={() => removeJob(job?._id)} className=' text-white rounded bg-red-600 md:px-5 px-3 md:py-3 py-1 hover:bg-white hover:text-red-600 hover:border  hover:border-red-600 '>Delete<FontAwesomeIcon icon={faTrashCan} className='ms-3' /></button>
+                        </div>
+                        <hr className='  md:w-330 mt-5 text-slate-400' />
+                        <div className='mt-5 text-gray-600'>
+                          <h1 className='text-l mt-3 text-sky-500'> <FontAwesomeIcon icon={faLocationDot} /> {job?.location}</h1>
+                          <h1 className='text-l mt-3'>Job Type : {job?.jobType}</h1>
+                          <h1 className='text-l mt-3'>Job Type : {job?.salary}</h1>
+                          <h1 className='text-l mt-3'>Qualification : {job?.qualification}</h1>
+                          <h1 className='text-l mt-3'>Experience : {job?.experience}</h1>
+                          <p className='text-l mt-3 text-justify ' >Description : {job?.description} </p>
+                        </div>
+                      </div>
+                    ))
+                    :
+                    <div>No jobs added currently</div>
                 }
 
               </div>
