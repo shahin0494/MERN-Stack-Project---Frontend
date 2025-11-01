@@ -1,7 +1,7 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import Home from './users/pages/Home'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Preloader from './components/Preloader'
 import Auth from './pages/Auth'
 import AllBooks from './users/pages/AllBooks'
@@ -14,11 +14,13 @@ import ResourceAdmin from './admin/pages/ResourceAdmin'
 import CareerAdmin from './admin/pages/CareerAdmin'
 import SettingAdmin from './admin/pages/SettingAdmin'
 import Pnf from './pages/Pnf'
+import { userAuthContext } from './contextAPI/AuthenticationContext'
 
 
 function App() {
 
   const [loading, setloading] = useState(true)
+  const { role, authorisedUser, setAuthorisedUser } = useContext(userAuthContext)
 
   useEffect(() => {
     setTimeout(() => {
@@ -29,18 +31,28 @@ function App() {
   return (
     <>
       <Routes>
+        {/* unauthorised or any user */}
         <Route path='/' element={loading ? <Preloader /> : <Home />} />
         <Route path='/login' element={<Auth />} />
         <Route path='/register' element={<Auth register />} />
         <Route path='/all-books' element={<AllBooks />} />
-        <Route path={'/books/:id/view'} element={<ViewBook />} />
-        <Route path='/profile' element={<Profile />} />
         <Route path='careers' element={<Careers />} />
         <Route path='contact' element={<Contact />} />
+
+        {/* logged in user */}
+        {
+          <>
+            <Route path={'/books/:id/view'} element={<ViewBook />} />
+            <Route path='/profile' element={<Profile />} />
+          </>
+        }
+
+        {/* admin */}
         <Route path='admin-dashboard' element={loading ? <Preloader /> : <AdminDashboard />} />
         <Route path='admin-resources' element={<ResourceAdmin />} />
         <Route path='admin-careers' element={<CareerAdmin />} />
         <Route path='admin-settings' element={<SettingAdmin />} />
+
         <Route path='/*' element={<Pnf />} />
       </Routes>
     </>

@@ -22,8 +22,8 @@ export const getHomeBooksApi = async () => {
 }
 
 // all jobs api 
-export const getAllJobAPI = async (searchKey)=>{
-    return await commonAPI("GET",`${SERVERURL}/all-job?search=${searchKey}`)
+export const getAllJobAPI = async (searchKey) => {
+    return await commonAPI("GET", `${SERVERURL}/all-job?search=${searchKey}`)
 }
 
 // -----------authorised user api - user -------------------------------
@@ -63,23 +63,26 @@ export const updateUserProfileAPI = async (reqBody, reqHeader) => {
     return await commonAPI("PUT", `${SERVERURL}/user-profile/edit`, reqBody, reqHeader)
 }
 
-// profile update
+// user apply for application - called by career component
+export const addApplicationAPI = async (reqBody, reqHeader) => {
+    return await commonAPI("POST", `${SERVERURL}/application/add`, reqBody, reqHeader)
+}
 
 
 // -------------authorised user api - admin -------------------
 
 // add job
-export const addJobsAPI = async (reqBody,reqHeader)=>{
+export const addJobsAPI = async (reqBody, reqHeader) => {
     return await commonAPI("POST", `${SERVERURL}/add-job`, reqBody, reqHeader)
 }
 
 // delete job
-export const removeJobsAPI = async (jobId,reqHeader)=>{
-    return await commonAPI("DELETE",`${SERVERURL}/job/${jobId}/remove`,{}, reqHeader)
+export const removeJobsAPI = async (jobId, reqHeader) => {
+    return await commonAPI("DELETE", `${SERVERURL}/job/${jobId}/remove`, {}, reqHeader)
 }
 
 // update admin
-export const updateAdminProfileAPI = async (reqBody,reqHeader)=>{
+export const updateAdminProfileAPI = async (reqBody, reqHeader) => {
     return await commonAPI("PUT", `${SERVERURL}/admin-profile/edit`, reqBody, reqHeader)
 }
 
@@ -94,7 +97,11 @@ export const getAllUsersAPI = async (reqHeader) => {
 }
 
 // approve boooks - called when approve button clicked frim admin component
-export const updateBookStatusAPI = async (reqBody,reqHeader) => {
-    return await commonAPI("PUT", `${SERVERURL}/admin/book/approve`, reqBody,reqHeader)
+export const updateBookStatusAPI = async (reqBody, reqHeader) => {
+    return await commonAPI("PUT", `${SERVERURL}/admin/book/approve`, reqBody, reqHeader)
 }
 
+// list application - called by admin career comoponent
+export const getAllApplicationAPI = async (reqHeader) => {
+    return await commonAPI("GET", `${SERVERURL}/all-application`, {}, reqHeader)
+}
