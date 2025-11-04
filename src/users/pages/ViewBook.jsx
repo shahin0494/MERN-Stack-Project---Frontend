@@ -9,6 +9,7 @@ import { getSingleBookAPI } from '../../services/allAPI'
 import { ToastContainer, toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import SERVERURL from '../../services/serverURL'
+import { loadStripe } from '@stripe/stripe-js';
 
 
 function ViewBook() {
@@ -46,6 +47,12 @@ function ViewBook() {
     }
   }
 
+  const handlePayment = async () => {
+    console.log("inside handle payment fnction");
+    // stripe object or instance
+    const stripe = await loadStripe('pk_test_51SPbdm2M3fJPEa74kzqrVzHG5VXvbyJuPoIhAbzvKtOew8YzF694jJsC0lq5cNZk4F8vkkrv2d23l17OSO4NXKAr00RFERt4ox');
+  }
+
   return (
 
     <>
@@ -78,7 +85,7 @@ function ViewBook() {
               </div>
               <div className='flex justify-end'>
                 <Link to={"/all-books"}><button className='bg-cyan-500 text-white p-2 rounded'><FontAwesomeIcon icon={faBackward} className='me-3' />Back</button></Link>
-                <button className='bg-lime-600 text-white p-2 ms-5 rounded'>Buy $ {book?.discountPrice}</button>
+                <button onClick={handlePayment} className='bg-lime-600 text-white p-2 ms-5 rounded'>Buy $ {book?.discountPrice}</button>
               </div>
             </div>
           </div>
@@ -104,8 +111,8 @@ function ViewBook() {
                 <div className='md:flex my-4'>
                   {/* duplicate images */}
                   {
-                    book?.uploadImg?.length >0?
-                      book?.uploadImg?.map(img =>(
+                    book?.uploadImg?.length > 0 ?
+                      book?.uploadImg?.map(img => (
                         <img style={{ height: '300px', width: "300px" }} className='mx-5 rounded' src={`${SERVERURL}/uploads/${img}`} alt="" />
                       ))
                       :

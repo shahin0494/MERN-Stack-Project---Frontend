@@ -14,6 +14,8 @@ import ResourceAdmin from './admin/pages/ResourceAdmin'
 import CareerAdmin from './admin/pages/CareerAdmin'
 import SettingAdmin from './admin/pages/SettingAdmin'
 import Pnf from './pages/Pnf'
+import PaymentSucess from './users/pages/PaymentSucess'
+import PaymentFailedd from './users/pages/PaymentFailedd'
 import { userAuthContext } from './contextAPI/AuthenticationContext'
 
 
@@ -44,6 +46,8 @@ function App() {
           <>
             <Route path={'/books/:id/view'} element={<ViewBook />} />
             <Route path='/profile' element={<Profile />} />
+            <Route path='/payment-success' element={<PaymentSucess />} />
+            <Route path='/payment-failed' element={<PaymentFailedd />} />
           </>
         }
 
