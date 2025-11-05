@@ -68,6 +68,10 @@ export const addApplicationAPI = async (reqBody, reqHeader) => {
     return await commonAPI("POST", `${SERVERURL}/application/add`, reqBody, reqHeader)
 }
 
+// make-payment - called by view book when "buy" button is clicked
+export const makePaymentAPI = async (reqBody, reqHeader) => {
+    return await commonAPI("POST", `${SERVERURL}/make-payment`, reqBody, reqHeader)
+}
 
 // -------------authorised user api - admin -------------------
 

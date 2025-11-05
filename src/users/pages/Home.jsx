@@ -89,7 +89,7 @@ function Home() {
 
         </div>
         <div className="text-center my-5">
-          <Link to={'/all-books'} className='bg-blue-600 border hover:bg-white hover:text-blue-600 text-white p-3' >Explore More...</Link>
+          <Link to={'/all-books'} className='bg-blue-600 border hover:bg-white rounded hover:text-blue-600 text-white p-3 transition-all duration-200' >Explore More...</Link>
         </div>
       </section>
       {/* author */}

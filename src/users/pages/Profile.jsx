@@ -306,10 +306,10 @@ function Profile() {
                       <div className='flex'>
                         {
                           item?.status == "pending" ?
-                            <img style={{ width: "150px", height: "100px" }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjlag_31KJZKjPCyXpldwr3TGrBf1uFQmDLA&s" alt="pending" /> :
+                            <img style={{ width: "100px", height: "100px" }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjlag_31KJZKjPCyXpldwr3TGrBf1uFQmDLA&s" alt="pending" /> :
                             item?.status == "approved" ?
-                              <img style={{ width: "150px", height: "100px" }} src="https://media.istockphoto.com/id/948531554/vector/approved-ink-stamp.jpg?s=612x612&w=0&k=20&c=kVKJxtXo1QOxDoqTvAdxHEjuVlcRvxGN-1f6qvyimRA=" alt="approved" /> :
-                              <img style={{ width: "150px", height: "100px" }} src="https://www.enago.com/academy/wp-content/uploads/2016/05/Rejection-without-Peer-Review-Issues-and-Solutions-1280x720.jpg" alt="reject" />}
+                              <img style={{ width: "300px", height: "200px" }} src="https://media.istockphoto.com/id/948531554/vector/approved-ink-stamp.jpg?s=612x612&w=0&k=20&c=kVKJxtXo1QOxDoqTvAdxHEjuVlcRvxGN-1f6qvyimRA=" alt="approved" /> :
+                              <img style={{ width: "200px", height: "200px" }} src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/sold-out-stamp-design-template-89756519e732cfb0be2a52799ef0d5d4_screen.jpg?ts=1737111674" alt="sold" />}
                       </div>
 
                     </div>
@@ -344,18 +344,18 @@ function Profile() {
                       <h3 className='text-lg'>$ {item?.discountPrice}</h3>
                       <p className="text-justify">{item?.abstract}</p>
                       <div className='flex'>
-                        <img style={{ width: "full", height: "130" }} src="https://static.vecteezy.com/system/resources/previews/002/271/846/non_2x/red-sold-stamp-logo-vector.jpg" alt="" />
+                        <img style={{ width: "200px", height: "130" }} src="https://en.pimg.jp/111/006/006/1/111006006.jpg" alt="" />
                       </div>
                     </div>
                     <div className='px-4 mt-4 md:mt-0'>
-                      <img className='w-full' src="./book.jpg" alt="" />
+                      <img className='w-full' src={item?.imageUrl} alt="" />
                     </div>
                   </div>
                 </div>
               ))
               :
               <div className='flex justify-center items-center flex-col'>
-                <img src="https://cdn.dribbble.com/userupload/25152143/file/original-19d00f0b43ff1449812b30a9635aaf5d.gif" alt="" />
+                <img className='w-50 h-50'  src="https://media.tenor.com/3n-ASJF-Y9YAAAAj/reading-read.gif" alt="" />
                 <p>books not purchased</p>
               </div>
           }

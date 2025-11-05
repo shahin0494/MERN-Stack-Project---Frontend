@@ -7,6 +7,7 @@ import { faBars, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import SERVERURL from '../../services/serverURL'
 import { userUpdateContext } from '../../contextAPI/ContextShare';
+import { userAuthContext } from '../../contextAPI/AuthenticationContext';
 
 
 function Header() {
@@ -16,6 +17,7 @@ function Header() {
   const [dropDownStatus, setDropDownStatus] = useState(false)
   const navigate = useNavigate()
   const {userEditResponse, setUserEditResponse} = useContext(userUpdateContext)
+  const { role, authorisedUser, setAuthorisedUser } = useContext(userAuthContext)
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
@@ -30,6 +32,7 @@ function Header() {
 
   const logout = () => {
     sessionStorage.clear()
+    setAuthorisedUser(false) //auth context
     setToken("")
     setUserDp("")
     setDropDownStatus(false)

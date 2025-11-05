@@ -43,6 +43,7 @@ function App() {
 
         {/* logged in user */}
         {
+          role == "user" &&
           <>
             <Route path={'/books/:id/view'} element={<ViewBook />} />
             <Route path='/profile' element={<Profile />} />
@@ -52,11 +53,15 @@ function App() {
         }
 
         {/* admin */}
-        <Route path='admin-dashboard' element={loading ? <Preloader /> : <AdminDashboard />} />
-        <Route path='admin-resources' element={<ResourceAdmin />} />
-        <Route path='admin-careers' element={<CareerAdmin />} />
-        <Route path='admin-settings' element={<SettingAdmin />} />
-
+        {
+        role == "admin" &&
+          <>
+            <Route path='admin-dashboard' element={loading ? <Preloader /> : <AdminDashboard />} />
+            <Route path='admin-resources' element={<ResourceAdmin />} />
+            <Route path='admin-careers' element={<CareerAdmin />} />
+            <Route path='admin-settings' element={<SettingAdmin />} />
+          </>
+        }
         <Route path='/*' element={<Pnf />} />
       </Routes>
     </>
